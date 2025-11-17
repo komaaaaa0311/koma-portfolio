@@ -17,22 +17,58 @@ body {
   perspective:1000px;
 }
 
-/* ---- Animated gradient background ---- */
+/* ---- Animated Hexagon Background (修正済み) ---- */
 body::before {
   content:"";
   position:fixed;
   top:0; left:0;
   width:100%; height:100%;
-  background: linear-gradient(270deg,#0e0e10,#001f3f,#0e0e10,#001f3f);
-  background-size:400% 400%;
-  animation: gradientBG 25s ease infinite;
+  /* 六角形パターンを生成するための複雑な設定 */
+  background-color: #0e0e10; /* ベースの色 */
+  
+  /* 描画する六角形のサイズ */
+  --s: 30px; /* 六角形の辺の長さ (調整可能) */
+  --c: calc(var(--s) * 1.732); /* sqrt(3) * s */
+  
+  background-image:
+    /* 斜めの線 1 (120度) */
+    repeating-linear-gradient(120deg, 
+      rgba(0,255,255,0.1) 0, rgba(0,255,255,0.1) 1px, 
+      transparent 1px, transparent calc(var(--c) / 2)
+    ),
+    /* 斜めの線 2 (60度) */
+    repeating-linear-gradient(60deg, 
+      rgba(0,255,255,0.1) 0, rgba(0,255,255,0.1) 1px, 
+      transparent 1px, transparent calc(var(--c) / 2)
+    ),
+    /* 水平の線 (0度) */
+    repeating-linear-gradient(0deg, 
+      rgba(0,255,255,0.1) 0, rgba(0,255,255,0.1) 1px, 
+      transparent 1px, transparent calc(var(--s) * 1.5)
+    );
+  
+  /* background-size: 六角形一つのタイルサイズ */
+  background-size: var(--c) calc(var(--s) * 3);
+  
+  animation: neonGlow 15s infinite alternate; /* ネオンの明滅アニメーション */
   z-index:-2;
-  filter:blur(40px);
+  filter: blur(1px); /* ぼかしを少し弱め、パターンを見えやすく */
+  background-blend-mode: overlay;
 }
-@keyframes gradientBG {
-  0% { background-position:0% 50%; }
-  50% { background-position:100% 50%; }
-  100% { background-position:0% 50%; }
+
+@keyframes neonGlow {
+  0% {
+    background-color: #0e0e10;
+    box-shadow: inset 0 0 10px #00eaff, inset 0 0 20px #00eaff, 0 0 5px #00eaff;
+  }
+  50% {
+    background-color: #050508;
+    box-shadow: inset 0 0 20px #0077ff, inset 0 0 40px #0077ff, 0 0 10px #0077ff;
+  }
+  100% {
+    background-color: #0e0e10;
+    box-shadow: inset 0 0 10px #00eaff, inset 0 0 20px #00eaff, 0 0 5px #00eaff;
+  }
 }
 
 /* ---- Header ---- */
@@ -64,12 +100,16 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   display:inline-block;
   color:#00d4ff;
   position:relative;
+  padding-left:15px;
 }
+/* 縦線を左側に変更 */
 .section-title::after {
   content:"";
   position:absolute;
-  left:0; bottom:-6px;
-  width:100%; height:5px;
+  left:0;
+  top:0;
+  width:5px;
+  height:100%;
   background:linear-gradient(90deg,#00d4ff,#0077ff);
   border-radius:3px;
   opacity:0.85;
@@ -148,13 +188,30 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 }
 .email { font-size:1.4rem; font-weight:700; color:#00c8ff; }
 
+/* main.css の内容をインラインで追加 */
+.email a {
+  pointer-events: auto; /* クリックはできる */
+  text-decoration: none;
+  color: #00eaff;
+  text-shadow: 0 0 6px #0096ff;
+}
+
+/* ホバー効果を完全に消す */
+.email a:hover {
+  color: #00eaff !important;
+  text-shadow: 0 0 6px #0096ff !important;
+  transform: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
 /* ---- Hover float ---- */
 .hover-float { transition: transform 0.3s ease, box-shadow 0.3s ease; }
 .hover-float:hover { transform: translateY(-6px) scale(1.02); box-shadow:0 15px 30px rgba(0,0,0,0.4); }
 
 /* ---- Hamburger Menu ---- */
 .hamburger {
-  position:fixed;
+  position:fixed; /* 常に画面の同じ位置に留まる */
   top:25px;
   right:25px;
   width:30px; height:25px;
@@ -199,6 +256,38 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 .hamburger.active span:nth-child(2) { opacity:0; }
 .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
 
+/* 自己紹介コンテンツ用のスタイル */
+.about-content {
+  background: rgba(20,20,30,0.8);
+  border-radius:18px;
+  padding:30px;
+  margin-top:20px;
+  margin-bottom:30px;
+}
+.about-content p {
+  margin-bottom:10px;
+}
+.about-content p:last-child {
+  margin-bottom:0;
+}
+
+/* 新規追加: メニュー外をタップして閉じるためのオーバーレイ */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); /* 透明な状態 */
+  z-index: 98; /* メニュー (z-index: 99) より下、コンテンツより上 */
+  display: none; /* 初期状態では非表示 */
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.overlay.active {
+  display: block;
+  background: rgba(0, 0, 0, 0.5); /* 開いている時は少し暗くする */
+}
 </style>
 </head>
 <body>
@@ -208,17 +297,26 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   <p class="subtitle">ゲーム開発・プログラミング作品集</p>
 </header>
 
-<!-- Hamburger menu -->
 <div class="hamburger" id="hamburger">
   <span></span><span></span><span></span>
 </div>
 <nav class="nav-menu" id="navMenu">
+  <a href="#about">自己紹介</a>
   <a href="#works">作品一覧</a>
   <a href="#apps">習得アプリ</a>
   <a href="#contact">お問い合わせ</a>
 </nav>
 
+<div class="overlay" id="overlay"></div>
+
 <div class="container">
+
+<h2 class="section-title" id="about">自己紹介</h2>
+<div class="about-content">
+  <p>私はゲーム開発とプログラミングに情熱を持つ学生です。</p>
+  <p>特にUnityを使ったゲーム制作、JavaScriptやPythonによるWeb・ツール開発に積極的に取り組んでいます。</p>
+  <p>論理的な思考力と新しい技術を学ぶ意欲には自信があり、チーム開発にも貢献したいと考えています。</p>
+</div>
 
 <h2 class="section-title" id="works">作品一覧</h2>
 <div class="works">
@@ -259,26 +357,36 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 <h2 class="section-title" id="contact">お問い合わせ</h2>
 <div class="contact-box">
   <p>ご連絡は以下のメールアドレスへお願いします。</p>
-  <p class="email">your_email@example.com</p>
+  <p class="email">
+    <a href="mailto:re24104e@st.omu.ac.jp">re24104e@st.omu.ac.jp</a>
+  </p>
 </div>
+
 
 </div>
 
 <script>
 const hamburger = document.getElementById("hamburger");
 const navMenu = document.getElementById("navMenu");
+const overlay = document.getElementById("overlay"); // オーバーレイ要素を取得
 
-hamburger.addEventListener("click", () => {
+// メニューの開閉を制御する関数
+function toggleMenu() {
   hamburger.classList.toggle("active");
   navMenu.classList.toggle("active");
+  overlay.classList.toggle("active"); // オーバーレイの表示・非表示を切り替え
+}
+
+// 1. ハンバーガーアイコンクリックでメニュー開閉
+hamburger.addEventListener("click", toggleMenu);
+
+// 2. メニュー内のリンククリックでメニューを閉じる
+document.querySelectorAll(".nav-menu a").forEach(link => {
+  link.addEventListener("click", toggleMenu);
 });
 
-document.querySelectorAll(".nav-menu a").forEach(link => {
-  link.addEventListener("click", () => {
-    hamburger.classList.remove("active");
-    navMenu.classList.remove("active");
-  });
-});
+// 3. オーバーレイ（アイコン以外の領域）クリックでメニューを閉じる
+overlay.addEventListener("click", toggleMenu);
 </script>
 
 </body>
