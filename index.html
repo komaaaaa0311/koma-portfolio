@@ -17,57 +17,55 @@ body {
   perspective:1000px;
 }
 
-/* ---- Animated Hexagon Background (修正済み) ---- */
+/* ---- Animated Hexagon Background ---- */
 body::before {
   content:"";
   position:fixed;
   top:0; left:0;
   width:100%; height:100%;
-  /* 六角形パターンを生成するための複雑な設定 */
-  background-color: #0e0e10; /* ベースの色 */
   
-  /* 描画する六角形のサイズ */
-  --s: 30px; /* 六角形の辺の長さ (調整可能) */
-  --c: calc(var(--s) * 1.732); /* sqrt(3) * s */
+  background-color: #0e0e10; 
+  
+  /* 六角形パターンを生成するための設定 */
+  --s: 40px; 
+  --c: calc(var(--s) * 1.732); 
+  --line-color: rgba(0,255,255,0.3); 
+  --line-width: 1px;
   
   background-image:
     /* 斜めの線 1 (120度) */
     repeating-linear-gradient(120deg, 
-      rgba(0,255,255,0.1) 0, rgba(0,255,255,0.1) 1px, 
-      transparent 1px, transparent calc(var(--c) / 2)
+      var(--line-color) 0, var(--line-color) var(--line-width), 
+      transparent var(--line-width), transparent calc(var(--c) / 2)
     ),
     /* 斜めの線 2 (60度) */
     repeating-linear-gradient(60deg, 
-      rgba(0,255,255,0.1) 0, rgba(0,255,255,0.1) 1px, 
-      transparent 1px, transparent calc(var(--c) / 2)
+      var(--line-color) 0, var(--line-color) var(--line-width), 
+      transparent var(--line-width), transparent calc(var(--c) / 2)
     ),
     /* 水平の線 (0度) */
     repeating-linear-gradient(0deg, 
-      rgba(0,255,255,0.1) 0, rgba(0,255,255,0.1) 1px, 
-      transparent 1px, transparent calc(var(--s) * 1.5)
+      var(--line-color) 0, var(--line-color) var(--line-width), 
+      transparent var(--line-width), transparent calc(var(--s) * 1.5)
     );
   
-  /* background-size: 六角形一つのタイルサイズ */
   background-size: var(--c) calc(var(--s) * 3);
   
-  animation: neonGlow 15s infinite alternate; /* ネオンの明滅アニメーション */
+  animation: neonGlow 15s infinite alternate; 
   z-index:-2;
-  filter: blur(1px); /* ぼかしを少し弱め、パターンを見えやすく */
+  filter: blur(0.5px); 
   background-blend-mode: overlay;
 }
 
 @keyframes neonGlow {
   0% {
     background-color: #0e0e10;
-    box-shadow: inset 0 0 10px #00eaff, inset 0 0 20px #00eaff, 0 0 5px #00eaff;
   }
   50% {
     background-color: #050508;
-    box-shadow: inset 0 0 20px #0077ff, inset 0 0 40px #0077ff, 0 0 10px #0077ff;
   }
   100% {
     background-color: #0e0e10;
-    box-shadow: inset 0 0 10px #00eaff, inset 0 0 20px #00eaff, 0 0 5px #00eaff;
   }
 }
 
@@ -102,7 +100,7 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   position:relative;
   padding-left:15px;
 }
-/* 縦線を左側に変更 */
+/* 縦線 */
 .section-title::after {
   content:"";
   position:absolute;
@@ -145,14 +143,32 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   margin-bottom:10px;
 }
 .work-title { font-size:1.3rem; margin-bottom:6px; color:#00d4ff; }
-.work-link {
-  display:inline-block;
-  margin-top:6px;
-  color:#00c8ff;
-  text-decoration:none;
-  font-weight:500;
+
+/* ---- プレイボタンのスタイル (新規追加) ---- */
+.play-button {
+  display: block; 
+  text-align: center;
+  padding: 10px 15px;
+  margin-top: 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  
+  /* Neon Style */
+  color: #00d4ff;
+  background: rgba(0, 119, 255, 0.1);
+  border: 1px solid #00c8ff;
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+  transition: all 0.3s ease;
 }
-.work-link:hover { color:#fff; text-shadow:0 0 8px #00c8ff; }
+.play-button:hover {
+  color: #fff;
+  background: #00c8ff;
+  box-shadow: 0 0 20px #00c8ff, 0 0 40px #00c8ff; 
+  transform: translateY(-2px); 
+}
+/* --------------------------------- */
 
 /* ---- App Grid ---- */
 .apps {
@@ -190,7 +206,7 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 
 /* main.css の内容をインラインで追加 */
 .email a {
-  pointer-events: auto; /* クリックはできる */
+  pointer-events: auto;
   text-decoration: none;
   color: #00eaff;
   text-shadow: 0 0 6px #0096ff;
@@ -211,7 +227,7 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 
 /* ---- Hamburger Menu ---- */
 .hamburger {
-  position:fixed; /* 常に画面の同じ位置に留まる */
+  position:fixed;
   top:25px;
   right:25px;
   width:30px; height:25px;
@@ -271,22 +287,22 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   margin-bottom:0;
 }
 
-/* 新規追加: メニュー外をタップして閉じるためのオーバーレイ */
+/* メニュー外をタップして閉じるためのオーバーレイ */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0); /* 透明な状態 */
-  z-index: 98; /* メニュー (z-index: 99) より下、コンテンツより上 */
-  display: none; /* 初期状態では非表示 */
+  background: rgba(0, 0, 0, 0);
+  z-index: 98;
+  display: none;
   cursor: pointer;
   transition: background 0.3s;
 }
 .overlay.active {
   display: block;
-  background: rgba(0, 0, 0, 0.5); /* 開いている時は少し暗くする */
+  background: rgba(0, 0, 0, 0.5);
 }
 </style>
 </head>
@@ -322,15 +338,15 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 <div class="works">
   <div class="work-card hover-float">
     <img src="game1.png" alt="Game 1">
-    <div class="work-title">アクションゲーム</div>
-    <p>Unityで制作したアクションゲームです。</p>
-    <a href="#" class="work-link">▶ プレイリンク</a>
+    <div class="work-title">懐中電灯シミュレーション</div>
+    <p>Scratchで制作したシミュレーションプログラム</p>
+    <a href="https://scratch.mit.edu/projects/1243795618/" class="play-button" target="_blank">▶ プレイリンク</a>
   </div>
   <div class="work-card hover-float">
     <img src="game2.png" alt="Game 2">
     <div class="work-title">パズルゲーム</div>
     <p>演出にこだわったパズルゲーム。</p>
-    <a href="#" class="work-link">▶ プレイリンク</a>
+    <a href="#" class="play-button">▶ プレイリンク</a>
   </div>
 </div>
 
@@ -368,13 +384,13 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 <script>
 const hamburger = document.getElementById("hamburger");
 const navMenu = document.getElementById("navMenu");
-const overlay = document.getElementById("overlay"); // オーバーレイ要素を取得
+const overlay = document.getElementById("overlay"); 
 
 // メニューの開閉を制御する関数
 function toggleMenu() {
   hamburger.classList.toggle("active");
   navMenu.classList.toggle("active");
-  overlay.classList.toggle("active"); // オーバーレイの表示・非表示を切り替え
+  overlay.classList.toggle("active");
 }
 
 // 1. ハンバーガーアイコンクリックでメニュー開閉
