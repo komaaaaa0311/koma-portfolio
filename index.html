@@ -3,23 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Portfolio</title>
+<title>Koma's portfolio</title>
 <link rel="stylesheet" href="main.css">
 </head>
 <body>
 
-<header>
-  <h1>My Portfolio</h1>
-  <p class="subtitle">ゲーム開発・プログラミング作品集</p>
+<header class="site-header">
+  <div class="header-inner container">
+    <div class="brand">
+      <h1>Koma's Portfolio</h1>
+      <p class="subtitle">ゲーム開発・プログラミング作品集</p>
+    </div>
+  </div>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
 </header>
-
-<div class="hamburger" id="hamburger">
-  <span></span><span></span><span></span>
-</div>
 <nav class="nav-menu" id="navMenu">
   <a href="#about">自己紹介</a>
   <a href="#works">作品一覧</a>
   <a href="#apps">習得アプリ</a>
+  <a href="#images">画像提供</a>
   <a href="#contact">お問い合わせ</a>
 </nav>
 
@@ -29,9 +33,42 @@
 
 <h2 class="section-title" id="about">自己紹介</h2>
 <div class="about-content">
-  <p>私はゲーム開発とプログラミングに情熱を持つ学生です。</p>
-  <p>特にUnityを使ったゲーム制作、JavaScriptやPythonによるWeb・ツール開発に積極的に取り組んでいます。</p>
-  <p>論理的な思考力と新しい技術を学ぶ意欲には自信があり、チーム開発にも貢献したいと考えています。</p>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">2023.03</div>
+      <div class="timeline-marker" aria-hidden="true"></div>
+      <div class="timeline-card">
+        <h3>月州中学校 卒業</h3>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">2023.04</div>
+      <div class="timeline-marker" aria-hidden="true"></div>
+      <div class="timeline-card">
+        <h3>大阪公立大学工業高等専門学校 入学</h3>
+        <p>サッカー部に入部し、技術と体力の両立を目指す。</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">2024.04</div>
+      <div class="timeline-marker" aria-hidden="true"></div>
+      <div class="timeline-card">
+        <h3>知能情報コース配属（2I）</h3>
+        <p>専門的なプログラミング学習がスタート。</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">2024.09</div>
+      <div class="timeline-marker" aria-hidden="true"></div>
+      <div class="timeline-card">
+        <h3></h3>
+        <p></p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <h2 class="section-title" id="works">作品一覧</h2>
@@ -40,15 +77,15 @@
      <div class="work-card hover-float">
      <img src="game1.png" alt="Game 1">
      <div class="work-title">懐中電灯シミュレーション</div>
-     <p>Scratchで制作したシミュレーションプログラム</p>
-     <a href="https://scratch.mit.edu/projects/1243795618/" class="play-button" target="_blank">▶ プレイリンク</a>
+     <p>小学校6年生の時にScratchで制作したシミュレーションプログラム</p>
+     <a href="https://scratch.mit.edu/projects/1243795618/" class="play-button" target="_blank">▶ 作品を見る</a>
      </div>
 
      <div class="work-card style-2 hover-float">
      <img src="game2.png" alt="Game 2">
      <div class="work-title">〇✖ゲーム</div>
      <p>学校の課題でGoogle colabを使って作った〇✖ゲーム</p>
-     <a href="#" class="play-button">▶ プレイリンク</a>
+     <a href="https://colab.research.google.com/drive/1UIYr6FUS-RfSbLDNXCM-L1rG0kjF0UNq#scrollTo=R_8vef44VeJb" class="play-button">▶ 作品を見る</a>
      </div>
 
   </div>
@@ -56,30 +93,77 @@
 <div class="apps">
   <div class="app-card hover-float">
     <img src="html_icon.png" alt="HTML">
-    <div class="app-name">HTML/CSS</div>
+    <div class="app-name">HTML</div>
   </div>
   <div class="app-card hover-float">
-    <img src="js_icon.png" alt="JavaScript">
-    <div class="app-name">JavaScript</div>
+    <img src="python_icon.png" alt="Python">
+    <div class="app-name">Python</div>
   </div>
   <div class="app-card hover-float">
     <img src="scratch_icon.png" alt="Scratch">
     <div class="app-name">Scratch</div>
   </div>
   <div class="app-card hover-float">
-    <img src="python_icon.png" alt="Python">
-    <div class="app-name">Python</div>
+    <img src="css_icon.png" alt="CSS">
+    <div class="app-name">CSS</div>
   </div>
+
 </div>
 
-<h2 class="section-title" id="contact">お問い合わせ</h2>
-<div class="contact-box">
-  <p>ご連絡は以下のメールアドレスへお願いします。</p>
-  <p class="email">
-    <a href="mailto:re24104e@st.omu.ac.jp">re24104e@st.omu.ac.jp</a>
-  </p>
+
+<!-- 画像提供セクション -->
+<h2 class="section-title" id="images">画像提供</h2>
+<div class="images-section">
+  <p class="images-desc">このポートフォリオで使用している画像の著作権・提供元を明記しています。ご協力いただいた皆様に感謝します。</p>
+  <ul class="images-list">
+    <li class="image-item">
+      <div class="image-thumb">
+        <img src="html_icon.png" alt="html icon">
+      </div>
+      <div class="image-info">
+        <span class="image-title">HTMLアイコン</span>
+        <span class="image-credit">提供: <a target="_blank" href="https://icons8.com/icon/20909/html-5">HTML</a> アイコン by <a target="_blank" href="https://icons8.com">Icons8</a></span>
+      </div>
+    </li>
+    <li class="image-item">
+      <div class="image-thumb">
+        <img src="python_icon.png" alt="python icon">
+      </div>
+      <div class="image-info">
+        <span class="image-title">Pythonアイコン</span>
+        <span class="image-credit">提供: <a target="_blank" href="https://icons8.com/icon/13441/python" rel="noopener">Python</a> アイコン by <a target="_blank" href="https://icons8.com" rel="noopener">Icons8</a></span>
+      </div>
+    </li>
+    <li class="image-item">
+      <div class="image-thumb">
+        <img src="scratch_icon.png" alt="scratch icon">
+      </div>
+      <div class="image-info">
+        <span class="image-title">Scratchアイコン</span>
+        <span class="image-credit">提供: <a href="https://icons8.com/icon/b8sdBSRPX1RX/scratch" target="_blank" rel="noopener">傷</a> アイコン by <a href="https://icons8.com" target="_blank" rel="noopener">Icons8</a></span>
+      </div>
+    </li>
+    <li class="image-item">
+      <div class="image-thumb">
+        <img src="css_icon.png" alt="css icon">
+      </div>
+      <div class="image-info">
+        <span class="image-title">Cssアイコン</span>
+        <span class="image-credit">提供: <a target="_blank" href="https://icons8.com/icon/21278/css3">CSS</a> アイコン by <a target="_blank" href="https://icons8.com">Icons8</a></span>
+      </div>
+    </li>
+    <!-- 画像を追加する場合はこのリストに追記してください -->
+  </ul>
 </div>
 
+  <!-- お問い合わせ（ページ下部） -->
+  <h2 class="section-title" id="contact">お問い合わせ</h2>
+  <div class="contact-box">
+    <p>ご連絡は以下のメールアドレスへお願いします。</p>
+    <p class="email">
+      <a href="mailto:re24104e@st.omu.ac.jp">re24104e@st.omu.ac.jp</a>
+    </p>
+  </div>
 
 </div>
 
@@ -106,6 +190,22 @@ document.querySelectorAll(".nav-menu a").forEach(link => {
 // 3. オーバーレイ（アイコン以外の領域）クリックでメニューを閉じる
 overlay.addEventListener("click", toggleMenu);
 </script>
+</script>
+
+<!-- Footer (simplified & unified height with header) -->
+<footer class="site-footer">
+  <div class="footer-inner container">
+    <div class="footer-content">
+      <span>© 2025 Fukushima Koma</span>
+      <a class="gh-link" href="https://github.com/komaaaaa0311" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>
