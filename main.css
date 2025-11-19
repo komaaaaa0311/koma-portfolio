@@ -442,10 +442,14 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 }
 
 /* ---- Timeline (自己紹介タイムライン風) ---- */
+/* タイムラインの全体設定 */
 .timeline {
   position: relative;
-  padding: 18px 12px 18px 120px; /* 左側に日付/ライン領域を確保 */
+  /* 日付と縦線のためのパディングを確保 */
+  padding: 18px 12px 18px 120px; 
 }
+
+/* 縦のネオン線 */
 .timeline::before{
   content: "";
   position: absolute;
@@ -457,13 +461,17 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   border-radius: 4px;
   box-shadow: 0 0 20px rgba(0,230,255,0.12), 0 0 36px rgba(0,160,255,0.04);
 }
+
+/* 各アイテムの設定 */
 .timeline-item{
   position: relative;
-  display: flex;
+  display: flex; /* カードを配置するために使用 */
   gap: 18px;
   align-items: flex-start;
-  margin-bottom: 22px;
+  margin-bottom: 35px; /* アイテム間の縦間隔を調整 */
 }
+
+/* 日付の配置 (左側) */
 .timeline-date{
   position: absolute;
   left: 0;
@@ -472,38 +480,51 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   color: #00d4ff;
   font-weight:700;
   opacity: 0.95;
-  top: 8px; /* 日付をマーカー中央に合わせる */
+  top: 8px; /* マーカーと高さを合わせる */
+  font-size: 1.05rem; /* 見やすく調整 */
 }
+
+/* マーカーの円 */
 .timeline-marker{
   position: absolute;
-  left: 64px; /* 縦線の中心に合わせて配置（縦線 left:72px の中心に合わせ計算済） */
+  left: 72px; /* 縦線の中心に合わせて配置 */
   top: 8px;
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: rgba(10,10,20,0.9);
+  background: #0e0e10; /* 背景色で塗りつぶし、縦線の上に載せる */
   border: 3px solid #00d4ff;
   box-shadow: 0 0 10px #00eaff, 0 0 24px rgba(0,140,255,0.12);
-  transform: translateX(-50%); /* 中心合わせの保険 */
+  transform: translateX(-50%); 
 }
+
+/* カードのスタイル */
 .timeline-card{
   background: rgba(18,18,28,0.55);
-  border-radius: 14px;
+  border-radius: 18px; /* 角を丸く調整 */
   padding: 16px 18px;
   border: 1px solid rgba(0,200,255,0.08);
   box-shadow: 0 6px 18px rgba(0,200,255,0.04);
   color: #eafcff;
   flex: 1 1 auto;
   transition: transform 0.28s ease, box-shadow 0.28s ease, border 0.28s ease;
+  min-height: 80px; /* 見栄えを良くするため最小高さを設定 */
 }
-.timeline-card h3{ margin:0 0 8px; font-size:1.08rem; color:#ffffff; }
-.timeline-card p{ margin:0; color: #cfeff7; opacity:0.9; }
+.timeline-card h3{ margin:0 0 6px; font-size:1.15rem; color:#ffffff; }
+.timeline-card p{ margin:0; color: #cfeff7; opacity:0.9; font-size: 0.95rem; }
 .timeline-card:hover{
-  transform: translateY(-6px);
+  transform: translateY(-4px); /* ホバー効果を維持 */
   border: var(--neon-border);
   box-shadow: var(--neon-shadow);
 }
 
+/* 微調整: 最小幅では左スペースを縮める */
+@media (max-width:720px){
+  .timeline { padding-left: 88px; }
+  .timeline::before{ left:60px; }
+  .timeline-date{ left: -6px; font-size:0.92rem; top:8px; }
+  .timeline-marker{ left: 52px; top:8px; transform: translateX(-50%); }
+}
 /* 微調整: 最小幅では左スペースを縮める */
 @media (max-width:720px){
   .timeline { padding-left: 88px; }
