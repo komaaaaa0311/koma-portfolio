@@ -8,6 +8,7 @@
 :root{
   --neon-border: 1px solid #00eaff;
   --neon-shadow: 0 0 20px #00eaff, 0 0 40px #00eaff;
+  --glitch-color: #0088ff; 
 }
 body {
   font-family:"Poppins","Noto Sans JP",sans-serif;
@@ -28,12 +29,43 @@ body::after {
               radial-gradient(circle at 85% 80%, rgba(0,180,255,0.035), transparent 8%);
   mix-blend-mode: screen;
   z-index: 0; /* 背景の上、コンテンツの下 */
-  animation: neonBlink 2.4s infinite ease-in-out;
+  /* 激しい点滅とバチバチ感を出すためにアニメーションを統合 */
+  animation: neonBlink 2s infinite ease-in-out, lightningGlitch 0.4s infinite steps(2);
 }
 
 @keyframes neonBlink {
   0%, 100% { opacity: 0.92; filter: blur(0.6px); }
   50%     { opacity: 1;    filter: blur(1.8px); }
+}
+
+/* 雷がバチバチしているように見せるアニメーション */
+@keyframes lightningGlitch {
+  0% { transform: translate(0, 0) scale(1.0); opacity: 0.05; }
+  10% { transform: translate(-0.5px, 0.5px) scale(1.002); opacity: 0.1; }
+  20% { transform: translate(0.5px, -0.5px) scale(0.998); opacity: 0.05; }
+  30% { opacity: 0; }
+  40% { transform: translate(-1px, 1px) scale(1.005); opacity: 0.15; }
+  50% { opacity: 0; }
+  60% { transform: translate(1px, -1px) scale(0.995); opacity: 0.05; }
+  70% { opacity: 0.1; }
+  80% { transform: translate(-0.2px, 0.2px); opacity: 0.02; }
+  100% { opacity: 0.05; }
+}
+
+/* 🔥 メインの点滅アニメーション (すべてで共有) */
+@keyframes intenseBlink {
+  0%, 100% {
+    text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff, 0 0 40px #00aaff;
+    opacity: 1;
+  }
+  50% {
+    text-shadow: none;
+    opacity: 0.8;
+  }
+  51% {
+    text-shadow: 0 0 5px #00aaff;
+    opacity: 0.9;
+  }
 }
 
 /* ---- Container ---- */
@@ -47,6 +79,14 @@ body::after {
   color:#00d4ff;
   position:relative;
   padding-left:15px;
+  /* 修正: ヘッダーの下に完全に収まるように調整 (120px) */
+  scroll-margin-top: 120px;
+  /* 修正: かっこいいフォントと激しい点滅 */
+  font-family: 'Consolas', 'Courier New', monospace; /* サイバー感のあるフォント */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  /* 修正: 周期をヒーローセクションと統一 (2s) */
+  animation: intenseBlink 2s infinite alternate; 
 }
 .section-title::after {
   content:"";
@@ -57,47 +97,88 @@ body::after {
   height:100%;
   background:linear-gradient(90deg,#00d4ff,#0077ff);
   border-radius:3px;
-  opacity:0.85;
   box-shadow:0 0 12px #00c8ff;
+  opacity:0.85;
 }
 /* セクション見出しのホバー（全ての見出しで統一） */
 .section-title:hover {
   color: #00d4ff;
   text-shadow: 0 0 8px rgba(0,200,255,0.12);
+  animation-play-state: paused; /* ホバーで点滅を一時停止 */
 }
 .section-title:hover::after {
   box-shadow: 0 0 20px #00c8ff;
 }
 
-/* ---- Hover float ---- */
-.hover-float { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+/* ---- Hover float (統一されたホバー効果) ---- */
+.hover-float { 
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease; 
+}
+
+/* 🔥 統一されたホバー枠線と影 */
 .hover-float:hover { 
-  /* hover-float のホバー */
-  transform: translateY(-6px) scale(1.02); 
-  border: var(--neon-border); /* 共通のネオン枠 */
-  box-shadow:0 15px 30px rgba(0,0,0,0.4), 0 0 18px #00eaff, var(--neon-shadow); 
-  background: rgba(20,20,30,0.4); /* ホバー時の透過率を上げる */
-  backdrop-filter: blur(10px); /* ホバー時のぼかしを強める */
+  transform: translateY(-8px) scale(1.03); /* 修正: 浮き上がりを大きく(-6px -> -8px)、拡大率を大きく(1.02 -> 1.03) */
+  border: var(--neon-border); 
+  box-shadow:0 15px 30px rgba(0,0,0,0.4), var(--neon-shadow); 
+  background: rgba(20,20,30,0.4); 
+  backdrop-filter: blur(10px); 
 }
 
-/* メニュー外をタップして閉じるためのオーバーレイ */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0);
-  z-index: 240; 
-  display: none;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-.overlay.active {
-  display: block;
-  background: rgba(0, 0, 0, 0.5);
+/*
+====================================
+0. トップページ (Hero)に関するコード
+====================================
+*/
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 600px; /* 大きく見せるための高さ */
+    overflow: hidden;
+    margin-top: -80px; /* bodyのpadding-topを打ち消す */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #000;
+    /* #top にジャンプした際にヘッダーに隠れないようにする調整 */
+    scroll-margin-top: 80px; 
 }
 
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.35; /* 背景画像を暗くしてネオンを目立たせる */
+    filter: blur(2px);
+    transform: scale(1.05);
+}
+
+.hero-content {
+    position: absolute;
+    z-index: 10;
+    padding: 20px;
+}
+
+.hero-content h2 {
+    font-size: 4rem;
+    font-weight: 900;
+    color: #fff;
+    /* トップページのスタイル: 強力なネオン効果 */
+    text-shadow: 0 0 20px #00eaff, 0 0 40px #00eaff, 0 0 60px #00aaff;
+    animation: intenseBlink 2s infinite alternate; 
+    margin-bottom: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    font-family: 'Consolas', 'Courier New', monospace; 
+}
+
+.hero-content p {
+    font-size: 1.8rem;
+    color: #00d4ff;
+    text-shadow: 0 0 8px #00c8ff;
+    letter-spacing: 2px;
+    /* フォント指定なし -> bodyのフォントを継承 */
+}
 /*
 ====================================
 1. タイトル/ヘッダーに関するコード
@@ -111,115 +192,74 @@ header.site-header{
   left:0;
   right:0;
   z-index:200; 
-  background: linear-gradient(180deg, rgba(0,20,30,0.85), rgba(5,10,18,0.7));
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  /* 透過効果をオフにし、濃い青黒の背景色に設定 */
+  background: #00141E;
   box-shadow: 0 6px 30px rgba(0,0,0,0.6);
 }
+
+/* ヘッダーのコンテンツをFlexboxで左右に配置 */
 header.site-header .header-inner{
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  justify-content:space-between; /* 左右に配置 */
   gap:18px;
   padding:0 8%;
 }
+
 header.site-header .brand h1{
   font-size:2rem; /* タイトルを小さく */
   font-weight:900;
   margin:0 0 6px 0;
   letter-spacing:1px;
-  background: linear-gradient(120deg,#00d4ff,#0077ff);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  text-shadow:0 0 12px rgba(0,200,255,0.28);
+  /* 修正: トップページと合わせ、グラデーションを削除し、ネオン効果を適用 */
+  color:#fff; /* 白い文字に */
+  background: none; /* 背景を削除 */
+  -webkit-background-clip: none;
+  background-clip: none;
+  /* 修正: トップページに合わせた強烈なネオンシャドウ (ヘッダーサイズに調整) */
+  text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff, 0 0 30px #00aaff;
+  /* フォントとアニメーションは統一されたものを維持 */
+  font-family: 'Consolas', 'Courier New', monospace;
+  animation: intenseBlink 2s infinite alternate; 
 }
 header.site-header .brand .subtitle{
   margin:0;
-  color:#bfefff;
-  opacity:0.95;
+  /* 🔥 修正: トップページ (.hero-content p) のスタイルに統一 */
+  color:#00d4ff; /* トップページと同じ色 */
+  opacity:1;
+  text-shadow: 0 0 8px #00c8ff; /* トップページと同じネオンシャドウ */
+  letter-spacing: 2px; /* トップページと同じ文字間隔 */
+  /* font-family の指定を削除し、トップページと同様にボディのフォントを継承 */
 }
 
-header h1 {
-  font-size:4rem;
-  font-weight:800;
-  letter-spacing:2px;
-  background: linear-gradient(120deg,#00d4ff,#0077ff);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  text-shadow:0 0 10px rgba(0,212,255,0.4);
-  margin-bottom:10px;
-  transition: none; 
-}
-header h1:hover {
-  text-shadow: 0 0 10px rgba(0,212,255,0.4);
-  transform: none;
-  filter: none;
-  cursor: default;
+p.subtitle { 
+    font-size:1.2rem; 
+    opacity:1; 
 }
 
-p.subtitle { font-size:1.2rem; opacity:0.85; }
-
-/* ---- Hamburger Menu (修正済み) ---- */
-.hamburger {
-  position:fixed; 
-  top: 27px; /* ヘッダーの高さの中央付近に固定 */
-  right:15px; 
-  width:35px; height:25px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  cursor:pointer;
-  z-index:260; 
-}
-.hamburger span {
-  display:block;
-  height:4px;
-  background:#00c8ff;
-  border-radius:2px;
-  transition:0.3s;
-}
+/* ---- Navigation Menu ---- */
 .nav-menu {
-  position:fixed;
-  top:0; /* 🔥 修正: ページ上部まで伸ばす */
-  right:-220px; 
-  width:200px;
-  height: 100%; /* 🔥 修正: ビューポート全体をカバー */
-  background: rgba(10,10,30,0.9); 
-  backdrop-filter: blur(10px); 
-  box-shadow:-5px 0 20px rgba(0,0,0,0.5);
-  transition:0.3s;
-  padding-top: 84px; /* 🔥 修正: ヘッダーの高さ(約64px)を避けて、リンクの開始位置を調整 */
-  padding-bottom: 20px; 
-  display:flex;
-  flex-direction:column;
-  gap: 0; 
-  z-index:250; 
+  display: flex; /* リンクを横並びに */
+  gap: 24px; /* リンク間のスペース */
+  z-index: 250; 
 }
 .nav-menu a {
   color:#00d4ff;
   text-decoration:none;
   font-weight:600;
-  padding: 15px 20px; 
+  padding: 8px 12px; /* ホバーエリアを調整 */
   transition: all 0.2s ease; 
-  display: flex; 
-  align-items: center; 
-  justify-content: flex-start; 
-  flex-grow: 1; /* 残りの垂直スペースを均等に埋める */
+  display: block; 
+  border-bottom: 2px solid transparent; /* ホバーで線を表示するための準備 */
 }
 .nav-menu a:hover { 
   color:#fff;
-  background: rgba(0, 200, 255, 0.15); 
-  border-radius: 6px; 
-  text-shadow: 0 0 12px #00eaff; 
-  transform: translateY(-2px); 
+  background: none; 
+  border-radius: 0;
+  text-shadow: 0 0 10px #00eaff; 
+  transform: none; 
+  border-bottom: 2px solid #00eaff; /* ホバーでネオンラインを表示 */
 }
-
-.nav-menu.active { right:0; }
-.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
-.hamburger.active span:nth-child(2) { opacity:0; }
-.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
 
 
 /* ---- Footer ---- */
@@ -280,6 +320,93 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   margin-bottom:0;
 }
 
+/* 🔥 追加: Profile Icon Area (基本情報とアイコンのレイアウト) */
+.profile-area {
+  display: flex;
+  align-items: flex-start; /* アイコンと基本情報を上揃えにする */
+  gap: 25px; /* アイコンと基本情報の間のスペース */
+  margin-bottom: 25px; /* 下部に余白を追加 */
+}
+
+.profile-icon {
+  flex-shrink: 0; /* 縮まないようにする */
+  width: 120px;
+  height: 120px;
+  border-radius: 50%; /* 円形にする */
+  overflow: hidden;
+  border: 4px solid #00eaff;
+  box-shadow: 0 0 15px #00eaff, 0 0 30px rgba(0,234,255,0.4);
+}
+
+.profile-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 修正: 基本情報セクションのスタイル */
+.profile-info {
+  flex-grow: 1; /* アイコンの残りのスペースを埋める */
+  margin-bottom: 0; /* 親要素で余白を管理するためリセット */
+  padding: 15px 20px;
+  border: 1px solid #00aaff; /* 実線に変更 */
+  border-radius: 12px;
+  background: rgba(0, 10, 20, 0.4);
+  box-shadow: 0 0 10px rgba(0, 170, 255, 0.25); /* 影を追加 */
+}
+.profile-info h3 {
+  font-size: 1.4rem;
+  color: #00d4ff;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #005577; /* 下線を調整 */
+  padding-bottom: 5px;
+}
+.profile-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.profile-info li {
+  margin-bottom: 5px;
+  padding-left: 15px;
+  position: relative;
+  font-size: 1rem;
+  color: #cffaff;
+}
+.profile-info li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #00eaff;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* ---- Profile Info GitHub Link Style ---- */
+.profile-info li .profile-github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #00eaff; /* ネオンカラー */
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+.profile-info li .profile-github-link svg {
+  color: #00eaff;
+  filter: drop-shadow(0 0 5px rgba(0, 234, 255, 0.5));
+}
+.profile-info li .profile-github-link:hover {
+  color: #fff;
+  text-shadow: 0 0 10px #00eaff;
+  transform: translateY(-1px);
+}
+.profile-info li .profile-github-link:hover svg {
+  color: #fff;
+  filter: drop-shadow(0 0 8px #00eaff);
+}
+
+
 /* ---- Timeline (自己紹介タイムライン風) ---- */
 /* タイムラインの全体設定 */
 .timeline {
@@ -291,7 +418,7 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 .timeline::before{
   content: "";
   position: absolute;
-  left: -6.5px; 
+  left: -6.5px; /* 日付ブロックの右側に縦線 */
   top: 30px;
   bottom: 12px;
   width: 4px;
@@ -310,7 +437,7 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 /* 日付の配置 (左側) */
 .timeline-date{
   position: absolute;
-  left: -80px;
+  left: -90px;
   width: 64px;
   text-align: right;
   color: #00d4ff;
@@ -322,7 +449,7 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 /* マーカーの円 */
 .timeline-marker{
   position: absolute;
-  left: -125px; 
+  left: -125px; /* 縦線の中心に合わせて配置 */
   top: 8px;
   width: 20px;
   height: 20px;
@@ -341,49 +468,43 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   box-shadow: 0 6px 18px rgba(0,200,255,0.04);
   color: #eafcff;
   flex: 1 1 auto;
-  transition: transform 0.28s ease, box-shadow 0.28s ease, border 0.28s ease;
   min-height: 80px; 
+  /* transformとtransitionは.hover-floatで定義 */
+}
+/* タイムラインカードの浮き上がりを他のカードより控えめに調整 */
+.timeline-card.hover-float:hover {
+    transform: translateY(-4px) scale(1.01); /* 他のカードより控えめに浮き上がらせる */
 }
 .timeline-card h3{ margin:0 0 6px; font-size:1.15rem; color:#ffffff; }
 .timeline-card p{ margin:0; color: #cfeff7; opacity:0.9; font-size: 0.95rem; }
-.timeline-card:hover{
-  transform: translateY(-4px); 
-  border: var(--neon-border);
-  box-shadow: var(--neon-shadow);
-}
-.cert-item {
-  background: rgba(25,25,35, 0.6); 
-  backdrop-filter: blur(8px); 
-  border: 1px solid rgba(0,200,255,0.12);
-  padding:12px 14px;
-  border-radius:12px;
-  color:#cffaff;
-  font-weight:600;
-  box-shadow: 0 6px 18px rgba(0,200,255,0.06);
-  transition: all 0.3s ease; 
-}
-/* .cert-item のホバー */
-.cert-item:hover {
-  background: rgba(10,10,20, 0.4); 
-  backdrop-filter: blur(10px); 
-  border: var(--neon-border); 
-  box-shadow: 0 0 30px rgba(0,234,255,0.12), var(--neon-shadow); 
-  transform: translateY(-4px);
-}
 
 
 /*
 ====================================
-3. 作品一覧に関するコード
+3. 作品一覧に関するコード (Works)
 ====================================
 */
-/* ---- Works Grid ---- */
+/* 🔥 Works 外枠全体へのネオン効果 */
 .works {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:30px;
   margin-top:20px;
+  
+  /* 外枠の装飾 */
+  border: 1px solid rgba(0, 200, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  transition: all 0.3s ease;
 }
+
+/* 🔥 Works 外枠ホバー */
+.works:hover {
+  border: var(--neon-border);
+  box-shadow: 0 0 30px rgba(0,234,255,0.4), var(--neon-shadow);
+  background: rgba(10, 10, 20, 0.2);
+}
+
 .work-card {
   background: rgba(20,20,30, 0.6); 
   backdrop-filter: blur(8px); 
@@ -395,25 +516,78 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   position: relative;
   overflow: hidden;
 }
-.work-card:hover {
-  /* .work-card のホバー */
-  transform: translateY(-6px);
-  border: var(--neon-border); 
-  box-shadow: var(--neon-shadow);
-  background: rgba(20, 20, 30, 0.4); 
-  backdrop-filter: blur(10px); 
-}
-.work-card::before {
-  display: none;
-}
+
 .work-card img {
   width:100%;
   height: 200px; 
   object-fit: cover; 
   border-radius:12px;
   margin-bottom:10px;
+  transition: opacity 0.3s;
 }
+
+/* 🔥 Works: ホバー時に画像を暗くする */
+.work-card:hover img {
+    opacity: 0.3;
+}
+
+/* ---- 作品ホバー時の内側効果 (追加) ---- */
+.work-card:hover .work-title {
+  color: #fff; /* タイトルを白に */
+  text-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff; /* 強力なネオンシャドウ */
+  transform: scale(1.02); /* 少し拡大 */
+  transition: all 0.3s ease;
+}
+
+/* 説明文と制作時期も少しネオン化 */
+.work-card:hover p {
+  color: #cffaff; 
+  text-shadow: 0 0 5px rgba(0,234,255,0.4); 
+  transition: all 0.3s ease;
+}
+
 .work-title { font-size:1.3rem; margin-bottom:6px; color:#00d4ff; }
+
+/* ---- 作品ホバー時の詳細情報 (ミニホバー) ---- */
+.work-hover-info {
+    position: absolute;
+    top: 50%; /* 画像の中央に配置 */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    /* 🔥 修正: サイズを小さく (80% -> 70% / 15px -> 10px) */
+    width: 70%; 
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.75); /* より暗く */
+    border-radius: 10px;
+    
+    /* 🔥 修正: 統一されたネオン枠線を適用 */
+    border: var(--neon-border);
+    box-shadow: var(--neon-shadow); 
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    text-align: center;
+}
+.work-card:hover .work-hover-info {
+    opacity: 1;
+    visibility: visible;
+}
+.work-hover-info p {
+    margin: 4px 0;
+    font-size: 0.95rem;
+    color: #cffaff;
+    line-height: 1.4;
+}
+.work-hover-info strong {
+    color: #fff;
+}
+.work-hover-info .detail-note {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: #00d4ff;
+}
 
 /* ---- プレイボタンのスタイル (ネオンボタン) ---- */
 .play-button {
@@ -433,27 +607,41 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   transition: all 0.3s ease;
 }
 .play-button:hover {
-  /* .play-button のホバー */
+  /* 🔥 統一されたネオン枠線と影 */
   color: #fff;
   background: #00c8ff;
-  border: var(--neon-border); 
-  box-shadow: var(--neon-shadow); 
+  border: var(--neon-border); /* 🔥 統一 */
+  box-shadow: var(--neon-shadow); /* 🔥 統一 */
   transform: translateY(-2px); 
 }
-
+/* --------------------------------- */
 
 /*
 ====================================
-4. 習得しているアプリに関するコード
+4. 習得しているアプリに関するコード (Skills)
 ====================================
 */
-/* ---- App Grid ---- */
+/* 🔥 Apps 外枠全体へのネオン効果 */
 .apps {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
   gap:20px;
   margin-top:20px;
+  
+  /* 外枠の装飾 */
+  border: 1px solid rgba(0, 200, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  transition: all 0.3s ease;
 }
+
+/* 🔥 Apps 外枠ホバー */
+.apps:hover {
+  border: var(--neon-border);
+  box-shadow: 0 0 30px rgba(0,234,255,0.4), var(--neon-shadow);
+  background: rgba(10, 10, 20, 0.2);
+}
+
 .app-card {
   background: rgba(20,20,30,0.6); 
   backdrop-filter: blur(8px); 
@@ -462,17 +650,104 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   text-align:center;
   border:1px solid rgba(0,200,255,0.2);
   transition:0.3s ease;
+  position: relative; /* ホバーコンテンツのために必要 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.app-card:hover {
-  /* .app-card のホバー */
-  transform: translateY(-4px);
-  border: var(--neon-border); 
-  box-shadow:0 12px 25px rgba(0,200,255,0.3), var(--neon-shadow);
-  background: rgba(20,20,30,0.4); 
-  backdrop-filter: blur(10px); 
-}
+
 .app-card img { width:60px; height:60px; margin-bottom:8px; }
-.app-name { font-size:1rem; color:#00d4ff; }
+.app-name { font-size:1rem; color:#00d4ff; margin-bottom: 10px; }
+
+
+/* ---- 習熟度バー (Proficiency Bar) ---- */
+.app-proficiency {
+    width: 90%;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(0, 200, 255, 0.2);
+}
+
+.app-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #00c8ff, #00eaff);
+    width: 0; /* 初期値 */
+    transition: width 1.5s ease-out; /* アニメーション */
+    box-shadow: 0 0 10px #00eaff, 0 0 18px #00c8ff;
+}
+
+/* JavaScriptなしでdata属性から幅を適用するためのCSS変数（5%刻みに拡張） */
+.app-card[data-level="10"] .app-bar { width: 10%; }
+.app-card[data-level="15"] .app-bar { width: 15%; }
+.app-card[data-level="20"] .app-bar { width: 20%; }
+.app-card[data-level="25"] .app-bar { width: 25%; }
+.app-card[data-level="30"] .app-bar { width: 30%; }
+.app-card[data-level="35"] .app-bar { width: 35%; }
+.app-card[data-level="40"] .app-bar { width: 40%; }
+.app-card[data-level="45"] .app-bar { width: 45%; }
+.app-card[data-level="50"] .app-bar { width: 50%; }
+.app-card[data-level="55"] .app-bar { width: 55%; }
+.app-card[data-level="60"] .app-bar { width: 60%; }
+.app-card[data-level="65"] .app-bar { width: 65%; }
+.app-card[data-level="70"] .app-bar { width: 70%; }
+.app-card[data-level="75"] .app-bar { width: 75%; }
+.app-card[data-level="80"] .app-bar { width: 80%; }
+.app-card[data-level="85"] .app-bar { width: 85%; }
+.app-card[data-level="90"] .app-bar { width: 90%; }
+.app-card[data-level="95"] .app-bar { width: 95%; }
+.app-card[data-level="100"] .app-bar { width: 100%; }
+
+.app-percentage {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 5px #00eaff;
+    z-index: 2;
+    transition: opacity 0.3s; 
+}
+
+/* 🔥 修正: カードホバー時、習熟度合の数字を非表示にする */
+.app-card:hover .app-percentage {
+    opacity: 0; 
+}
+
+/* ---- スキルホバー時の詳細情報 (ミニホバー) ---- */
+.app-hover-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* 🔥 修正: サイズを小さく (10px -> 8px / 0.9rem -> 0.85rem) */
+    padding: 8px;
+    background: rgba(0, 10, 20, 0.9);
+    
+    /* 🔥 修正: 統一されたネオン枠線と影を適用 */
+    border-top: var(--neon-border);
+    box-shadow: 0 -4px 10px rgba(0, 234, 255, 0.3), 0 -8px 20px rgba(0, 234, 255, 0.1); /* 上方向に影を出す */
+
+    color: #cffaff;
+    font-size: 0.85rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, transform 0.3s;
+    transform: translateY(100%);
+    text-align: left;
+}
+.app-card:hover .app-hover-info {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
 
 
 /*
@@ -524,13 +799,9 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   padding: 14px 18px;
   transition: 0.3s;
   border: 1px solid rgba(0,200,255,0.18);
+  /* hover-float が適用されている */
 }
-.image-item:hover {
-  /* .image-item のホバー */
-  border: var(--neon-border);
-  box-shadow: var(--neon-shadow);
-  background: rgba(25,25,35,0.85);
-}
+
 .image-thumb {
   width: 96px;
   height: 96px;
@@ -578,7 +849,19 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   backdrop-filter: blur(8px); 
   border-radius:25px;
   text-align:center;
+  /* 🔥 修正: ホバー効果のために transition を追加 */
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0,200,255,0.2); /* 初期枠線を少し目立たせる */
 }
+
+/* 🔥 修正: .contact-box のカスタムホバー（枠線統一、浮き上がり削除） */
+.contact-box:hover {
+  border: var(--neon-border); /* 統一された枠線 */
+  box-shadow: var(--neon-shadow); /* 統一された影 */
+  background: rgba(10,10,20,0.4); 
+  transform: none; /* 浮き上がり効果を削除 */
+}
+
 .email { font-size:1.4rem; font-weight:700; color:#00c8ff; }
 
 .email a {
@@ -588,8 +871,183 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   text-shadow: 0 0 6px #0096ff; 
   transition: color 0.2s, text-shadow 0.2s;
 }
+/* 🔥 修正: メールアドレスリンクのホバーから枠線/背景色を削除 */
 .email a:hover {
   color: #fff;
   text-shadow: 0 0 12px #00eaff, 0 0 24px #00eaff;
   filter: brightness(1.15);
+}
+
+
+/*
+====================================
+7. レスポンシブ対応 (Mobile: max-width: 600px)
+====================================
+*/
+@media (max-width: 600px) {
+    /* ---- 1. General ---- */
+    .container {
+        padding: 0 4%; /* 左右の余白を減らす */
+    }
+    .section-title {
+        font-size: 1.8rem; /* セクションタイトルを小さく */
+        scroll-margin-top: 100px;
+    }
+    .about-content {
+        padding: 20px;
+    }
+
+    /* ---- 2. Header/Navigation ---- */
+    header.site-header{
+        padding: 10px 0; /* ヘッダーの高さを低く */
+    }
+    header.site-header .header-inner {
+        flex-direction: column; /* 縦に並べる */
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+        padding: 0 4%;
+    }
+    header.site-header .brand h1 {
+        font-size: 1.6rem;
+        margin: 0;
+    }
+    header.site-header .brand .subtitle {
+        font-size: 1rem;
+    }
+    .nav-menu {
+        flex-wrap: wrap; /* リンクが入りきらない場合は折り返す */
+        justify-content: center;
+        gap: 10px; /* リンク間のスペースを狭める */
+        font-size: 0.85rem;
+    }
+    .nav-menu a {
+        padding: 5px 8px;
+    }
+    body {
+        padding-top: 140px; /* ヘッダーが縦に長くなるため、コンテンツの開始位置を下げる */
+    }
+
+    /* ---- 3. Hero Section ---- */
+    .hero-section {
+        height: 400px; /* 高さを縮小 */
+    }
+    .hero-content h2 {
+        font-size: 2.5rem;
+        letter-spacing: 3px;
+    }
+    .hero-content p {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+
+    /* ---- 4. Profile Area (アイコンと基本情報) ---- */
+    .profile-area {
+        flex-direction: column; /* 縦並び */
+        align-items: center; /* 中央揃え */
+        gap: 15px;
+    }
+    .profile-info {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .profile-icon {
+      width: 100px; /* アイコンを少し小さく */
+      height: 100px;
+    }
+
+    /* ---- 5. Timeline (モバイル最適化) ---- */
+    .timeline {
+        padding: 18px 0 18px 40px; /* 縦線スペースとカードの開始位置を確保 */
+    }
+    /* 縦線を左端から少し離す */
+    .timeline::before {
+        left: 10px; 
+        top: 25px; 
+        bottom: 5px;
+    }
+    .timeline-item {
+        margin-bottom: 30px;
+        display: block; /* Flexboxを解除し縦積み */
+    }
+    /* 日付をカードの上に配置 */
+    .timeline-date {
+        position: static; /* absoluteを解除し、通常の流れに */
+        width: auto;
+        text-align: left;
+        margin-bottom: 8px;
+        padding-left: 20px; /* マーカーの右側に位置させるためのインデント */
+        font-size: 1rem;
+        color: #00eaff;
+    }
+    /* マーカーの位置を調整 */
+    .timeline-marker {
+        position: absolute; 
+        left: 6px; /* 縦線（left: 10px）の中心に合わせる */
+        top: 30px; /* 日付とカードの間に配置 */
+    }
+    .timeline-card {
+        margin-left: 20px; /* 縦線と日付から少し離す */
+        padding: 12px 15px;
+    }
+
+    /* ---- 6. Works (作品一覧) ---- */
+    .works {
+        grid-template-columns: 1fr; /* 1列にする */
+        gap: 20px;
+        padding: 15px;
+    }
+    .work-card img {
+        height: 160px; /* 画像の高さを少し下げる */
+    }
+    
+    /* ---- 7. Skills (アプリ) ---- */
+    .apps {
+        grid-template-columns: repeat(2, 1fr); /* 2列にする */
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    /* ---- 8. Image Source (画像提供) ---- */
+    .images-section {
+        padding: 20px;
+    }
+    .images-list {
+        grid-template-columns: 1fr; /* 1列にする */
+        gap: 15px;
+    }
+    .image-item {
+        flex-direction: column; /* 画像と情報を縦並びにする */
+        align-items: center;
+        text-align: center;
+        padding: 15px;
+    }
+    .image-thumb {
+        margin-right: 0;
+        margin-bottom: 10px;
+        width: 60px;
+        height: 60px;
+    }
+    .image-thumb img {
+        width: 60px;
+        height: 60px;
+    }
+    .image-info {
+        align-items: center;
+    }
+    
+    /* ---- 9. Contact & Footer ---- */
+    .contact-box {
+        padding: 25px;
+    }
+    .email {
+        font-size: 1.2rem;
+    }
+    .site-footer .footer-inner {
+        flex-direction: column;
+    }
+    .site-footer .footer-content {
+        flex-direction: column;
+        gap: 5px;
+    }
 }
