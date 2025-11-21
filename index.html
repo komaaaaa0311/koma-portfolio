@@ -15,10 +15,10 @@
       <p class="subtitle">ゲーム開発・プログラミング作品集</p>
     </div>
   </div>
-  <div class="hamburger" id="hamburger">
-    <span></span><span></span><span></span>
-  </div>
 </header>
+<div class="hamburger" id="hamburger">
+  <span></span><span></span><span></span>
+</div>
 <nav class="nav-menu" id="navMenu">
   <a href="#about">自己紹介</a>
   <a href="#works">作品一覧</a>
@@ -35,37 +35,37 @@
 <div class="about-content">
   <div class="timeline">
     <div class="timeline-item">
-      <div class="timeline-date">2023.03</div>
+      <div class="timeline-date">2024.03</div>
       <div class="timeline-marker" aria-hidden="true"></div>
       <div class="timeline-card">
-        <h3>月州中学校 卒業</h3>
-        <p>中学校生活を終え、新たなステージへ</p> </div>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-date">2023.04</div>
-      <div class="timeline-marker" aria-hidden="true"></div>
-      <div class="timeline-card">
-        <h3>大阪公立大学工業高等専門学校 入学</h3>
-        <p>サッカー部に入部し、技術と体力の両立を目指す。</p>
-      </div>
+        <h3>中学校卒業</h3>
+        <p>公立中学校を卒業し、新生活を。</p> </div>
     </div>
 
     <div class="timeline-item">
       <div class="timeline-date">2024.04</div>
       <div class="timeline-marker" aria-hidden="true"></div>
       <div class="timeline-card">
-        <h3>知能情報コース配属（2I）</h3>
-        <p>専門的なプログラミング学習がスタート。</p>
+        <h3>大阪公立大学工業高等専門学校 入学</h3>
+        <p>サッカー部に入部し、運動と勉強の両立を目指す。</p>
       </div>
     </div>
 
     <div class="timeline-item">
-      <div class="timeline-date">2024.09</div>
+      <div class="timeline-date">2025.04</div>
       <div class="timeline-marker" aria-hidden="true"></div>
       <div class="timeline-card">
-        <h3>初めてのチーム開発（仮）</h3>
-        <p>学園祭のWebサイト制作に協力。HTML/CSSの基礎を習得し、共同開発の難しさと楽しさを知る。</p>
+        <h3>知能情報コース配属（2I）</h3>
+        <p>サッカー部退部し、勉強やアルバイトに力を入れる。本格的なプログラミング学習が始まる。</p>
+      </div>
+   
+    </div>
+        <div class="timeline-item">
+      <div class="timeline-date">2025.10</div>
+      <div class="timeline-marker" aria-hidden="true"></div>
+      <div class="timeline-card">
+        <h3>初めてのチームでの作品開発</h3>
+        <p>高専祭での作品展示。チームでの作品開発の楽しさや大変さを学ぶ。</p>
       </div>
     </div>
   </div>
@@ -73,7 +73,6 @@
 
 <h2 class="section-title" id="works">作品一覧</h2>
 <div class="works">
-  
      <div class="work-card hover-float">
      <img src="game1.png" alt="Game 1">
      <div class="work-title">懐中電灯シミュレーション</div>
@@ -88,7 +87,14 @@
      <a href="https://colab.research.google.com/drive/1UIYr6FUS-RfSbLDNXCM-L1rG0kjF0UNq#scrollTo=R_8vef44VeJb" class="play-button">▶ 作品を見る</a>
      </div>
 
+        <div class="work-card style-2 hover-float">
+     <img src="game3.png" alt="Game 2">
+     <div class="work-title">2人対戦型サッカーゲーム(Fishoot)</div>
+     <p>高専祭での展示のために作ったサッカーゲーム</p>
+     <a href="" class="play-button">▶ 作品を見る</a>
+     </div>
   </div>
+
 <h2 class="section-title" id="apps">習得しているアプリ</h2>
 <div class="apps">
   <div class="app-card hover-float">
@@ -107,9 +113,7 @@
     <img src="css_icon.png" alt="CSS">
     <div class="app-name">CSS</div>
   </div>
-
 </div>
-
 
 <h2 class="section-title" id="images">画像提供</h2>
 <div class="images-section">
@@ -151,20 +155,18 @@
         <span class="image-credit">提供: <a target="_blank" href="https://icons8.com/icon/21278/css3">CSS</a> アイコン by <a target="_blank" href="https://icons8.com">Icons8</a></span>
       </div>
     </li>
-    </ul>
+  </ul>
 </div>
 
-  <h2 class="section-title" id="contact">お問い合わせ</h2>
-  <div class="contact-box">
-    <p>ご連絡は以下のメールアドレスへお願いします。</p>
-    <p class="email">
-      <a href="mailto:re24104e@st.omu.ac.jp">re24104e@st.omu.ac.jp</a>
-    </p>
-  </div>
-
+<h2 class="section-title" id="contact">お問い合わせ</h2>
+<div class="contact-box">
+  <p>ご連絡は以下のメールアドレスへお願いします。</p>
+  <p class="email">
+    <a href="mailto:re24104e@st.omu.ac.jp">re24104e@st.omu.ac.jp</a>
+  </p>
 </div>
 
-<script>
+</div> <script>
 const hamburger = document.getElementById("hamburger");
 const navMenu = document.getElementById("navMenu");
 const overlay = document.getElementById("overlay"); 
@@ -186,7 +188,6 @@ document.querySelectorAll(".nav-menu a").forEach(link => {
 
 // 3. オーバーレイ（アイコン以外の領域）クリックでメニューを閉じる
 overlay.addEventListener("click", toggleMenu);
-</script>
 </script>
 
 <footer class="site-footer">

@@ -1,14 +1,8 @@
-.images-section a {
-  color: #00eaff;
-  text-decoration: underline;
-  text-shadow: 0 0 6px #0096ff;
-  transition: color 0.2s, text-shadow 0.2s;
-}
-.images-section a:hover {
-  color: #fff;
-  text-shadow: 0 0 12px #00eaff, 0 0 24px #00eaff;
-  filter: brightness(1.2);
-}
+/*
+====================================
+グローバル / リセット / ユーティリティ
+====================================
+*/
 /* ---- Reset ---- */
 * { margin:0; padding:0; box-sizing:border-box; }
 :root{
@@ -21,13 +15,8 @@ body {
   background:#0e0e10;
   line-height:1.7;
   overflow-x:hidden;
-  padding-top: 80px; /* ヘッダー固定時にコンテンツが被らない余白（小さくした分を反映） */
+  padding-top: 80px; /* ヘッダー固定時にコンテンツが被らない余白 */
 }
-
-/* ---- Animated Honeycomb (ネオンハニカムタイル) ---- */
-/* 六角形の背景は不要なので、body::before を完全に削除します */
-/* body::before { ... } を削除 */
-
 
 /* 強いネオン点滅オーバーレイ（光点滅のみにする） */
 body::after {
@@ -47,6 +36,73 @@ body::after {
   50%     { opacity: 1;    filter: blur(1.8px); }
 }
 
+/* ---- Container ---- */
+.container { padding:0 8%; }
+
+/* ---- Section Titles ---- */
+.section-title {
+  font-size:2.2rem;
+  margin:60px 0 20px;
+  display:inline-block;
+  color:#00d4ff;
+  position:relative;
+  padding-left:15px;
+}
+.section-title::after {
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:5px;
+  height:100%;
+  background:linear-gradient(90deg,#00d4ff,#0077ff);
+  border-radius:3px;
+  opacity:0.85;
+  box-shadow:0 0 12px #00c8ff;
+}
+/* セクション見出しのホバー（全ての見出しで統一） */
+.section-title:hover {
+  color: #00d4ff;
+  text-shadow: 0 0 8px rgba(0,200,255,0.12);
+}
+.section-title:hover::after {
+  box-shadow: 0 0 20px #00c8ff;
+}
+
+/* ---- Hover float ---- */
+.hover-float { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.hover-float:hover { 
+  /* hover-float のホバー */
+  transform: translateY(-6px) scale(1.02); 
+  border: var(--neon-border); /* 共通のネオン枠 */
+  box-shadow:0 15px 30px rgba(0,0,0,0.4), 0 0 18px #00eaff, var(--neon-shadow); 
+  background: rgba(20,20,30,0.4); /* ホバー時の透過率を上げる */
+  backdrop-filter: blur(10px); /* ホバー時のぼかしを強める */
+}
+
+/* メニュー外をタップして閉じるためのオーバーレイ */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  z-index: 240; 
+  display: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.overlay.active {
+  display: block;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/*
+====================================
+1. タイトル/ヘッダーに関するコード
+====================================
+*/
 /* Header (トップレベルに正しく定義) */
 header.site-header{
   padding:14px 0; /* 小さめヘッダー */
@@ -54,7 +110,7 @@ header.site-header{
   top:0;
   left:0;
   right:0;
-  z-index:200; /* ハンバーガーより前面に出す */
+  z-index:200; 
   background: linear-gradient(180deg, rgba(0,20,30,0.85), rgba(5,10,18,0.7));
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
@@ -83,12 +139,110 @@ header.site-header .brand .subtitle{
   color:#bfefff;
   opacity:0.95;
 }
-.header-actions{ display:flex; align-items:center; }
-.header-social .social-link{ color:#bfefff; display:inline-flex; align-items:center; justify-content:center; padding:6px; border-radius:6px;}
-.header-social .social-link svg{ color: #bfefff; filter: drop-shadow(0 0 8px rgba(0,200,255,0.08)); }
 
-/* 下部を少し丸める見た目 */
-header.site-header { border-radius: 0 0 25px 25px; }
+header h1 {
+  font-size:4rem;
+  font-weight:800;
+  letter-spacing:2px;
+  background: linear-gradient(120deg,#00d4ff,#0077ff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:0 0 10px rgba(0,212,255,0.4);
+  margin-bottom:10px;
+  transition: none; 
+}
+header h1:hover {
+  text-shadow: 0 0 10px rgba(0,212,255,0.4);
+  transform: none;
+  filter: none;
+  cursor: default;
+}
+
+p.subtitle { font-size:1.2rem; opacity:0.85; }
+
+/* ---- Hamburger Menu (修正済み) ---- */
+.hamburger {
+  position:fixed; 
+  top: 27px; /* ヘッダーの高さの中央付近に固定 */
+  right:15px; 
+  width:35px; height:25px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  cursor:pointer;
+  z-index:260; 
+}
+.hamburger span {
+  display:block;
+  height:4px;
+  background:#00c8ff;
+  border-radius:2px;
+  transition:0.3s;
+}
+.nav-menu {
+  position:fixed;
+  top:0; /* 🔥 修正: ページ上部まで伸ばす */
+  right:-220px; 
+  width:200px;
+  height: 100%; /* 🔥 修正: ビューポート全体をカバー */
+  background: rgba(10,10,30,0.9); 
+  backdrop-filter: blur(10px); 
+  box-shadow:-5px 0 20px rgba(0,0,0,0.5);
+  transition:0.3s;
+  padding-top: 84px; /* 🔥 修正: ヘッダーの高さ(約64px)を避けて、リンクの開始位置を調整 */
+  padding-bottom: 20px; 
+  display:flex;
+  flex-direction:column;
+  gap: 0; 
+  z-index:250; 
+}
+.nav-menu a {
+  color:#00d4ff;
+  text-decoration:none;
+  font-weight:600;
+  padding: 15px 20px; 
+  transition: all 0.2s ease; 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-start; 
+  flex-grow: 1; /* 残りの垂直スペースを均等に埋める */
+}
+.nav-menu a:hover { 
+  color:#fff;
+  background: rgba(0, 200, 255, 0.15); 
+  border-radius: 6px; 
+  text-shadow: 0 0 12px #00eaff; 
+  transform: translateY(-2px); 
+}
+
+.nav-menu.active { right:0; }
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.active span:nth-child(2) { opacity:0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+
+/* ---- Footer ---- */
+.site-footer{
+  margin-top: 40px;
+  padding: 14px 8%; 
+  text-align:center;
+  background: rgba(6,8,12,0.6);
+  border-top: 1px solid rgba(0,200,255,0.06);
+}
+.site-footer .footer-inner{
+  display:flex;
+  align-items:center;
+  justify-content:center; 
+  gap:12px;
+  max-width:1100px;
+  margin:0 auto;
+}
+.site-footer .footer-content{ display:inline-flex; align-items:center; gap:10px; color:#bfefff; }
+.site-footer a{ color:#bfefff; text-decoration:none; }
+.site-footer .gh-link{ display:inline-flex; align-items:center; gap:8px; }
+.site-footer svg{ color:#bfefff; }
+.site-footer .sep{ opacity:0.6; }
 
 /* Footer: ネオンホバーを強める */
 .site-footer a{
@@ -103,82 +257,126 @@ header.site-header { border-radius: 0 0 25px 25px; }
 }
 .site-footer .gh-link svg{ filter: drop-shadow(0 0 10px rgba(0,200,255,0.18)); }
 
-header h1 {
-  font-size:4rem;
-  font-weight:800;
-  letter-spacing:2px;
-  background: linear-gradient(120deg,#00d4ff,#0077ff);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  text-shadow:0 0 10px rgba(0,212,255,0.4);
+
+/*
+====================================
+2. 自己紹介に関するコード
+====================================
+*/
+/* 自己紹介コンテンツ用のスタイル */
+.about-content {
+  background: rgba(20,20,30,0.6); 
+  backdrop-filter: blur(8px); 
+  border-radius:18px;
+  padding:30px;
+  margin-top:20px;
+  margin-bottom:30px;
+  border: 1px solid #0a4045;
+}
+.about-content p {
   margin-bottom:10px;
-  transition: none; /* ホバーで視覚効果が変わらないようにする */
+}
+.about-content p:last-child {
+  margin-bottom:0;
 }
 
-/* タイトルにホバーによる追加効果を発生させない（見た目を常に一定にする） */
-header h1:hover {
-  text-shadow: 0 0 10px rgba(0,212,255,0.4);
-  transform: none;
-  filter: none;
-  cursor: default;
+/* ---- Timeline (自己紹介タイムライン風) ---- */
+/* タイムラインの全体設定 */
+.timeline {
+  position: relative;
+  /* 日付と縦線のためのパディングを確保 */
+  padding: 18px 12px 18px 120px; 
 }
-
-p.subtitle { font-size:1.2rem; opacity:0.85; }
-
-/* ---- Section Titles ---- */
-.section-title {
-  font-size:2.2rem;
-  margin:60px 0 20px;
-  display:inline-block;
-  color:#00d4ff;
-  position:relative;
-  padding-left:15px;
+/* 縦のネオン線 */
+.timeline::before{
+  content: "";
+  position: absolute;
+  left: -6.5px; 
+  top: 30px;
+  bottom: 12px;
+  width: 4px;
+  background: linear-gradient(180deg,#00d4ff,#0077ff);
+  border-radius: 4px;
+  box-shadow: 0 0 20px rgba(0,230,255,0.12), 0 0 36px rgba(0,160,255,0.04);
 }
-.section-title::after {
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  width:5px;
-  height:100%;
-  background:linear-gradient(90deg,#00d4ff,#0077ff);
-  border-radius:3px;
-  opacity:0.85;
-  box-shadow:0 0 12px #00c8ff;
+/* 各アイテムの設定 */
+.timeline-item{
+  position: relative;
+  display: flex; 
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 35px; 
 }
-
-/* セクション見出しのホバー（全ての見出しで統一） */
-.section-title:hover {
+/* 日付の配置 (左側) */
+.timeline-date{
+  position: absolute;
+  left: -80px;
+  width: 64px;
+  text-align: right;
   color: #00d4ff;
-  text-shadow: 0 0 8px rgba(0,200,255,0.12);
+  font-weight:700;
+  opacity: 0.95;
+  top: 3px; 
+  font-size: 1.05rem; 
 }
-.section-title:hover::after {
-  box-shadow: 0 0 20px #00c8ff;
+/* マーカーの円 */
+.timeline-marker{
+  position: absolute;
+  left: -125px; 
+  top: 8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0e0e10; 
+  border: 3px solid #00d4ff;
+  box-shadow: 0 0 10px #00eaff, 0 0 24px rgba(0,140,255,0.12);
+  transform: translateX(-50%); 
 }
-
-/* ---- Container ---- */
-.container { padding:0 8%; }
+/* カードのスタイル */
+.timeline-card{
+  background: rgba(18,18,28,0.55);
+  border-radius: 18px; 
+  padding: 16px 18px;
+  border: 1px solid rgba(0,200,255,0.08);
+  box-shadow: 0 6px 18px rgba(0,200,255,0.04);
+  color: #eafcff;
+  flex: 1 1 auto;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border 0.28s ease;
+  min-height: 80px; 
+}
+.timeline-card h3{ margin:0 0 6px; font-size:1.15rem; color:#ffffff; }
+.timeline-card p{ margin:0; color: #cfeff7; opacity:0.9; font-size: 0.95rem; }
+.timeline-card:hover{
+  transform: translateY(-4px); 
+  border: var(--neon-border);
+  box-shadow: var(--neon-shadow);
+}
 .cert-item {
-  background: rgba(25,25,35, 0.6); /* 常時半透明に */
-  backdrop-filter: blur(8px); /* 常時ぼかす */
+  background: rgba(25,25,35, 0.6); 
+  backdrop-filter: blur(8px); 
   border: 1px solid rgba(0,200,255,0.12);
   padding:12px 14px;
   border-radius:12px;
   color:#cffaff;
   font-weight:600;
   box-shadow: 0 6px 18px rgba(0,200,255,0.06);
-  transition: all 0.3s ease; /* ホバー効果のためにtransitionを残す */
+  transition: all 0.3s ease; 
 }
 /* .cert-item のホバー */
 .cert-item:hover {
-  background: rgba(10,10,20, 0.4); /* ホバー時の透過率をさらに上げる */
-  backdrop-filter: blur(10px); /* ホバー時のぼかしを少し強める */
-  border: var(--neon-border); /* 共通のネオン枠 */
-  box-shadow: 0 0 30px rgba(0,234,255,0.12), var(--neon-shadow); /* ネオンの光を追加 */
+  background: rgba(10,10,20, 0.4); 
+  backdrop-filter: blur(10px); 
+  border: var(--neon-border); 
+  box-shadow: 0 0 30px rgba(0,234,255,0.12), var(--neon-shadow); 
   transform: translateY(-4px);
 }
 
+
+/*
+====================================
+3. 作品一覧に関するコード
+====================================
+*/
 /* ---- Works Grid ---- */
 .works {
   display:grid;
@@ -187,8 +385,8 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   margin-top:20px;
 }
 .work-card {
-  background: rgba(20,20,30, 0.6); /* 常時半透明に */
-  backdrop-filter: blur(8px); /* 常時ぼかす */
+  background: rgba(20,20,30, 0.6); 
+  backdrop-filter: blur(8px); 
   border-radius:18px;
   padding:18px;
   cursor:pointer;
@@ -200,16 +398,18 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 .work-card:hover {
   /* .work-card のホバー */
   transform: translateY(-6px);
-  border: var(--neon-border); /* 共通のネオン枠 */
+  border: var(--neon-border); 
   box-shadow: var(--neon-shadow);
-  background: rgba(20, 20, 30, 0.4); /* ホバー時の透過率を上げる */
-  backdrop-filter: blur(10px); /* ホバー時のぼかしを強める */
+  background: rgba(20, 20, 30, 0.4); 
+  backdrop-filter: blur(10px); 
 }
 .work-card::before {
   display: none;
 }
 .work-card img {
   width:100%;
+  height: 200px; 
+  object-fit: cover; 
   border-radius:12px;
   margin-bottom:10px;
 }
@@ -226,8 +426,8 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   font-weight: 700;
   font-size: 1.05rem;
   color: #00d4ff;
-  background: rgba(0, 119, 255, 0.2); /* 半透明に */
-  backdrop-filter: blur(5px); /* 常時ぼかす */
+  background: rgba(0, 119, 255, 0.2); 
+  backdrop-filter: blur(5px); 
   border: 1px solid #00c8ff;
   box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
   transition: all 0.3s ease;
@@ -236,12 +436,17 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   /* .play-button のホバー */
   color: #fff;
   background: #00c8ff;
-  border: var(--neon-border); /* 共通のネオン枠 */
+  border: var(--neon-border); 
   box-shadow: var(--neon-shadow); 
   transform: translateY(-2px); 
 }
-/* --------------------------------- */
 
+
+/*
+====================================
+4. 習得しているアプリに関するコード
+====================================
+*/
 /* ---- App Grid ---- */
 .apps {
   display:grid;
@@ -250,8 +455,8 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   margin-top:20px;
 }
 .app-card {
-  background: rgba(20,20,30,0.6); /* 常時半透明に */
-  backdrop-filter: blur(8px); /* 常時ぼかす */
+  background: rgba(20,20,30,0.6); 
+  backdrop-filter: blur(8px); 
   border-radius:16px;
   padding:12px;
   text-align:center;
@@ -261,38 +466,20 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 .app-card:hover {
   /* .app-card のホバー */
   transform: translateY(-4px);
-  border: var(--neon-border); /* 共通のネオン枠 */
+  border: var(--neon-border); 
   box-shadow:0 12px 25px rgba(0,200,255,0.3), var(--neon-shadow);
-  background: rgba(20,20,30,0.4); /* ホバー時の透過率を上げる */
-  backdrop-filter: blur(10px); /* ホバー時のぼかしを強める */
+  background: rgba(20,20,30,0.4); 
+  backdrop-filter: blur(10px); 
 }
 .app-card img { width:60px; height:60px; margin-bottom:8px; }
 .app-name { font-size:1rem; color:#00d4ff; }
 
-/* ---- Contact ---- */
-.contact-box {
-  margin:60px 0;
-  padding:40px;
-  background: rgba(10,10,20,0.6); /* 常時半透明に */
-  backdrop-filter: blur(8px); /* 常時ぼかす */
-  border-radius:25px;
-  text-align:center;
-}
-.email { font-size:1.4rem; font-weight:700; color:#00c8ff; }
 
-.email a {
-  pointer-events: auto; 
-  text-decoration: none;
-  color: #00eaff;
-  text-shadow: 0 0 6px #0096ff; /* 弱めの常時光 */
-  transition: color 0.2s, text-shadow 0.2s;
-}
-.email a:hover {
-  color: #fff;
-  text-shadow: 0 0 12px #00eaff, 0 0 24px #00eaff;
-  filter: brightness(1.15);
-}
-
+/*
+====================================
+5. 画像提供に関するコード
+====================================
+*/
 /* ---- 画像提供セクション ---- */
 .images-section {
   margin: 60px 0;
@@ -315,6 +502,19 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
   gap: 24px;
   padding: 0;
 }
+
+.images-section a {
+  color: #00eaff;
+  text-decoration: underline;
+  text-shadow: 0 0 6px #0096ff;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.images-section a:hover {
+  color: #fff;
+  text-shadow: 0 0 12px #00eaff, 0 0 24px #00eaff;
+  filter: brightness(1.2);
+}
+
 .image-item {
   background: rgba(25,25,35,0.7);
   border-radius: 14px;
@@ -365,212 +565,31 @@ p.subtitle { font-size:1.2rem; opacity:0.85; }
 }
 
 
-/* ---- Hover float ---- */
-.hover-float { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-.hover-float:hover { 
-  /* hover-float のホバー */
-  transform: translateY(-6px) scale(1.02); 
-  border: var(--neon-border); /* 共通のネオン枠 */
-  box-shadow:0 15px 30px rgba(0,0,0,0.4), 0 0 18px #00eaff, var(--neon-shadow); 
-  background: rgba(20,20,30,0.4); /* ホバー時の透過率を上げる */
-  backdrop-filter: blur(10px); /* ホバー時のぼかしを強める */
-}
-
-/* ---- Hamburger Menu ---- */
-.hamburger {
-  position:absolute; /* ヘッダー内で垂直中央に配置 */
-  top:50%;
-  transform:translateY(-50%);
-  right:20px;
-  width:30px; height:25px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  cursor:pointer;
-  z-index:210; /* ヘッダーより前面に出す */
-}
-.hamburger span {
-  display:block;
-  height:4px;
-  background:#00c8ff;
-  border-radius:2px;
-  transition:0.3s;
-}
-.nav-menu {
-  position:fixed;
-  top:64px; right:-220px; /* ヘッダー分だけ下げて表示（ヘッダー高さに合わせ調整） */
-  width:200px;
-  height:100%;
-  background: rgba(10,10,30,0.85); /* 常時半透明に */
-  backdrop-filter: blur(10px); /* 常時ぼかす */
-  box-shadow:-5px 0 20px rgba(0,0,0,0.3);
-  transition:0.3s;
-  padding-top:80px;
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-  z-index:99;
-}
-.nav-menu a {
-  color:#00d4ff;
-  text-decoration:none;
-  font-weight:600;
-  padding:8px 20px;
-}
-.nav-menu a:hover { color:#fff; }
-
-.nav-menu.active { right:0; }
-.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
-.hamburger.active span:nth-child(2) { opacity:0; }
-.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
-
-/* 自己紹介コンテンツ用のスタイル */
-.about-content {
-  background: rgba(20,20,30,0.6); /* 常時半透明に */
-  backdrop-filter: blur(8px); /* 常時ぼかす */
-  border-radius:18px;
-  padding:30px;
-  margin-top:20px;
-  margin-bottom:30px;
-  border: 1px solid #0a4045;
-}
-.about-content p {
-  margin-bottom:10px;
-}
-.about-content p:last-child {
-  margin-bottom:0;
-}
-
-/* ---- Timeline (自己紹介タイムライン風) ---- */
-/* タイムラインの全体設定 */
-.timeline {
-  position: relative;
-  /* 日付と縦線のためのパディングを確保 */
-  padding: 18px 12px 18px 120px; 
-}
-
-/* 縦のネオン線 */
-.timeline::before{
-  content: "";
-  position: absolute;
-  left: 72px; /* 日付ブロックの右側に縦線 */
-  top: 12px;
-  bottom: 12px;
-  width: 4px;
-  background: linear-gradient(180deg,#00d4ff,#0077ff);
-  border-radius: 4px;
-  box-shadow: 0 0 20px rgba(0,230,255,0.12), 0 0 36px rgba(0,160,255,0.04);
-}
-
-/* 各アイテムの設定 */
-.timeline-item{
-  position: relative;
-  display: flex; /* カードを配置するために使用 */
-  gap: 18px;
-  align-items: flex-start;
-  margin-bottom: 35px; /* アイテム間の縦間隔を調整 */
-}
-
-/* 日付の配置 (左側) */
-.timeline-date{
-  position: absolute;
-  left: 0;
-  width: 64px;
-  text-align: right;
-  color: #00d4ff;
-  font-weight:700;
-  opacity: 0.95;
-  top: 8px; /* マーカーと高さを合わせる */
-  font-size: 1.05rem; /* 見やすく調整 */
-}
-
-/* マーカーの円 */
-.timeline-marker{
-  position: absolute;
-  left: 72px; /* 縦線の中心に合わせて配置 */
-  top: 8px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #0e0e10; /* 背景色で塗りつぶし、縦線の上に載せる */
-  border: 3px solid #00d4ff;
-  box-shadow: 0 0 10px #00eaff, 0 0 24px rgba(0,140,255,0.12);
-  transform: translateX(-50%); 
-}
-
-/* カードのスタイル */
-.timeline-card{
-  background: rgba(18,18,28,0.55);
-  border-radius: 18px; /* 角を丸く調整 */
-  padding: 16px 18px;
-  border: 1px solid rgba(0,200,255,0.08);
-  box-shadow: 0 6px 18px rgba(0,200,255,0.04);
-  color: #eafcff;
-  flex: 1 1 auto;
-  transition: transform 0.28s ease, box-shadow 0.28s ease, border 0.28s ease;
-  min-height: 80px; /* 見栄えを良くするため最小高さを設定 */
-}
-.timeline-card h3{ margin:0 0 6px; font-size:1.15rem; color:#ffffff; }
-.timeline-card p{ margin:0; color: #cfeff7; opacity:0.9; font-size: 0.95rem; }
-.timeline-card:hover{
-  transform: translateY(-4px); /* ホバー効果を維持 */
-  border: var(--neon-border);
-  box-shadow: var(--neon-shadow);
-}
-
-/* 微調整: 最小幅では左スペースを縮める */
-@media (max-width:720px){
-  .timeline { padding-left: 88px; }
-  .timeline::before{ left:60px; }
-  .timeline-date{ left: -6px; font-size:0.92rem; top:8px; }
-  .timeline-marker{ left: 52px; top:8px; transform: translateX(-50%); }
-}
-/* 微調整: 最小幅では左スペースを縮める */
-@media (max-width:720px){
-  .timeline { padding-left: 88px; }
-  .timeline::before{ left:60px; }
-  .timeline-date{ left: -6px; font-size:0.92rem; top:8px; }
-  .timeline-marker{ left: 52px; top:8px; transform: translateX(-50%); }
-}
-
-
-/* メニュー外をタップして閉じるためのオーバーレイ */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0);
-  z-index: 98;
-  display: none;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-.overlay.active {
-  display: block;
-  background: rgba(0, 0, 0, 0.5);
-}
-
-/* ---- Footer ---- */
-.site-footer{
-  margin-top: 40px;
-  padding: 14px 8%; /* ヘッダーと高さを揃える */
+/*
+====================================
+6. お問い合わせに関するコード
+====================================
+*/
+/* ---- Contact ---- */
+.contact-box {
+  margin:60px 0;
+  padding:40px;
+  background: rgba(10,10,20,0.6); 
+  backdrop-filter: blur(8px); 
+  border-radius:25px;
   text-align:center;
-  background: rgba(6,8,12,0.6);
-  border-top: 1px solid rgba(0,200,255,0.06);
 }
-.site-footer .footer-inner{
-  display:flex;
-  align-items:center;
-  justify-content:center; /* 中央揃え */
-  gap:12px;
-  max-width:1100px;
-  margin:0 auto;
-}
-.site-footer .footer-content{ display:inline-flex; align-items:center; gap:10px; color:#bfefff; }
-.site-footer a{ color:#bfefff; text-decoration:none; }
-.site-footer .gh-link{ display:inline-flex; align-items:center; gap:8px; }
-.site-footer svg{ color:#bfefff; }
+.email { font-size:1.4rem; font-weight:700; color:#00c8ff; }
 
-.site-footer .sep{ opacity:0.6; }
+.email a {
+  pointer-events: auto; 
+  text-decoration: none;
+  color: #00eaff;
+  text-shadow: 0 0 6px #0096ff; 
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.email a:hover {
+  color: #fff;
+  text-shadow: 0 0 12px #00eaff, 0 0 24px #00eaff;
+  filter: brightness(1.15);
+}
