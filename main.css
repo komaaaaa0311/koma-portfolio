@@ -74,11 +74,16 @@ body::after {
 /* ---- Section Titles ---- */
 .section-title {
   font-size:2.2rem;
-  margin:60px 0 20px;
-  display:inline-block;
+  /* 🔥 修正: 中央揃えを維持 */
+  margin:60px auto 20px; 
+  display:block;
+  width: fit-content; 
+  
   color:#00d4ff;
   position:relative;
-  padding-left:15px;
+  /* padding-left:15px; 縦線削除に伴い削除 */
+  padding-bottom: 5px; /* 下線のために余白を設ける */
+  
   /* 修正: ヘッダーの下に完全に収まるように調整 (120px) */
   scroll-margin-top: 120px;
   /* 修正: かっこいいフォントと激しい点滅 */
@@ -88,17 +93,20 @@ body::after {
   /* 修正: 周期をヒーローセクションと統一 (2s) */
   animation: intenseBlink 2s infinite alternate; 
 }
+/* 🔥 修正: 縦線からネオン下線へ変更 */
 .section-title::after {
   content:"";
   position:absolute;
   left:0;
-  top:0;
-  width:5px;
-  height:100%;
+  bottom:0; /* 下に配置 */
+  width:100%; /* 全幅 */
+  height:3px; /* 線の太さ */
   background:linear-gradient(90deg,#00d4ff,#0077ff);
   border-radius:3px;
-  box-shadow:0 0 12px #00c8ff;
-  opacity:0.85;
+  box-shadow:0 0 12px #00c8ff, 0 0 24px rgba(0,200,255,0.4); /* ネオン感を出す */
+  opacity:0.9;
+  transform: scaleX(0.8); /* 少し短めにしておしゃれに */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 /* セクション見出しのホバー（全ての見出しで統一） */
 .section-title:hover {
@@ -106,8 +114,10 @@ body::after {
   text-shadow: 0 0 8px rgba(0,200,255,0.12);
   animation-play-state: paused; /* ホバーで点滅を一時停止 */
 }
+/* 🔥 修正: ホバー時に下線を伸ばす */
 .section-title:hover::after {
-  box-shadow: 0 0 20px #00c8ff;
+  transform: scaleX(1); 
+  box-shadow: 0 0 20px #00c8ff, 0 0 40px rgba(0,200,255,0.6);
 }
 
 /* ---- Hover float (統一されたホバー効果) ---- */
@@ -115,11 +125,11 @@ body::after {
   transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease; 
 }
 
-/* 🔥 統一されたホバー枠線と影 */
+/* 🔥 修正: 統一されたホバー枠線と影 (小さく調整) */
 .hover-float:hover { 
-  transform: translateY(-8px) scale(1.03); /* 修正: 浮き上がりを大きく(-6px -> -8px)、拡大率を大きく(1.02 -> 1.03) */
+  transform: translateY(-4px) scale(1.015); /* 浮き上がりと拡大率を小さく調整 */
   border: var(--neon-border); 
-  box-shadow:0 15px 30px rgba(0,0,0,0.4), var(--neon-shadow); 
+  box-shadow:0 8px 15px rgba(0,0,0,0.4), var(--neon-shadow); /* 影を小さく */
   background: rgba(20,20,30,0.4); 
   backdrop-filter: blur(10px); 
 }
@@ -132,7 +142,7 @@ body::after {
 .hero-section {
     position: relative;
     width: 100%;
-    height: 600px; /* 大きく見せるための高さ */
+    height: 800px; /* 🔥 修正: トップ画像を拡大 (維持) */
     overflow: hidden;
     margin-top: -80px; /* bodyのpadding-topを打ち消す */
     display: flex;
@@ -211,7 +221,7 @@ header.site-header .brand h1{
   font-weight:900;
   margin:0 0 6px 0;
   letter-spacing:1px;
-  /* 修正: トップページと合わせ、グラデーションを削除し、ネオン効果を適用 */
+  /* 修正: トップページと合わせ、ネオン効果を適用 */
   color:#fff; /* 白い文字に */
   background: none; /* 背景を削除 */
   -webkit-background-clip: none;
@@ -471,9 +481,9 @@ p.subtitle {
   min-height: 80px; 
   /* transformとtransitionは.hover-floatで定義 */
 }
-/* タイムラインカードの浮き上がりを他のカードより控えめに調整 */
+/* 🔥 修正: タイムラインカードの浮き上がりをさらに控えめに */
 .timeline-card.hover-float:hover {
-    transform: translateY(-4px) scale(1.01); /* 他のカードより控えめに浮き上がらせる */
+    transform: translateY(-2px) scale(1.005); 
 }
 .timeline-card h3{ margin:0 0 6px; font-size:1.15rem; color:#ffffff; }
 .timeline-card p{ margin:0; color: #cfeff7; opacity:0.9; font-size: 0.95rem; }
@@ -487,7 +497,8 @@ p.subtitle {
 /* 🔥 Works 外枠全体へのネオン効果 */
 .works {
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  /* 修正: 常に1列表示にし、横幅を最大限に活かす */
+  grid-template-columns:1fr; 
   gap:30px;
   margin-top:20px;
   
@@ -510,66 +521,98 @@ p.subtitle {
   backdrop-filter: blur(8px); 
   border-radius:18px;
   padding:18px;
-  cursor:pointer;
+  cursor:default; /* ラジオボタン操作がメインになるためポインターをデフォルトに */
   border:1px solid rgba(0,200,255,0.2);
   transition:0.3s ease;
   position: relative;
   overflow: hidden;
+
+  /* 縦並びのカードとしてスタイルを修正 */
+  display: flex;
+  flex-direction: column;
 }
 
-.work-card img {
-  width:100%;
-  height: 200px; 
-  object-fit: cover; 
-  border-radius:12px;
-  margin-bottom:10px;
-  transition: opacity 0.3s;
+.work-card {
+  background: rgba(20, 20, 30, 0.9);
+  padding: 28px;
+  border-radius: 18px;
+  border: 1px solid #3af9;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* 🔥 Works: ホバー時に画像を暗くする */
-.work-card:hover img {
-    opacity: 0.3;
+/* 🔥 修正: 作品カードホバーで大きく (小さく調整) */
+.work-card:hover {
+  transform: scale(1.015); /* 拡大率を小さく調整 */
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); /* 影も小さく */
 }
 
-/* ---- 作品ホバー時の内側効果 (追加) ---- */
-.work-card:hover .work-title {
-  color: #fff; /* タイトルを白に */
-  text-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff; /* 強力なネオンシャドウ */
-  transform: scale(1.02); /* 少し拡大 */
-  transition: all 0.3s ease;
+/* ----------- ここから修正された画像切替ロジック ----------- */
+
+.work-gallery-auto {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* 🔥 修正: 縦横比を16:9に統一（高さ固定を削除） */
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 20px; /* 画像の下に余白を追加 */
 }
 
-/* 説明文と制作時期も少しネオン化 */
-.work-card:hover p {
-  color: #cffaff; 
-  text-shadow: 0 0 5px rgba(0,234,255,0.4); 
-  transition: all 0.3s ease;
+/* 全画像の共通設定 */
+.work-gallery-auto .slide {
+  position: absolute;
+  inset: 0;
+  background-size: contain; /* 🔥 修正: 画像全体を表示 (見切れ防止) */
+  background-repeat: no-repeat; /* 繰り返しを防ぐ */
+  background-color: #0e0e10; /* 余白ができる場合の色を背景色に合わせる */
+  background-position: center;
+  opacity: 0;
+  animation: image-switch-animation 12s infinite;
+  animation-play-state: paused; /* ← ホバーするまで停止 */
 }
 
-.work-title { font-size:1.3rem; margin-bottom:6px; color:#00d4ff; }
-
-/* ---- 作品ホバー時の詳細情報 (ミニホバー) ---- */
-.work-hover-info {
-    position: absolute;
-    top: 50%; /* 画像の中央に配置 */
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    /* 🔥 修正: サイズを小さく (80% -> 70% / 15px -> 10px) */
-    width: 70%; 
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.75); /* より暗く */
-    border-radius: 10px;
-    
-    /* 🔥 修正: 統一されたネオン枠線を適用 */
-    border: var(--neon-border);
-    box-shadow: var(--neon-shadow); 
-    
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-    text-align: center;
+/* ホバー中だけ切り替える */
+.work-gallery-auto:hover .slide {
+  animation-play-state: running;
 }
+
+/* ホバーを外したとき → 1枚目に戻る */
+.work-gallery-auto:not(:hover) .s1 {
+  opacity: 1 !important;
+  animation: none !important;
+}
+.work-gallery-auto:not(:hover) .slide:not(.s1) {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* 各画像の遅延（切替タイミング） */
+.work-gallery-auto .s1 { animation-delay: 0s; }
+.work-gallery-auto .s2 { animation-delay: 4s; }
+.work-gallery-auto .s3 { animation-delay: 8s; }
+
+/* フェードアニメーション */
+@keyframes image-switch-animation {
+  0%   { opacity: 0; }
+  5%   { opacity: 1; }
+  25%  { opacity: 1; }
+  30%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* 作品詳細情報のタイトル */
+.work-card .work-title {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px #00eaff;
+}
+/* 作品詳細情報の本文 */
+.work-card p {
+  font-size: 1rem;
+  color: #cffaff;
+  margin-bottom: 8px;
+}
+
 .work-card:hover .work-hover-info {
     opacity: 1;
     visibility: visible;
@@ -606,15 +649,114 @@ p.subtitle {
   box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
   transition: all 0.3s ease;
 }
+/* 🔥 修正: 浮き上がり効果を削除 */
 .play-button:hover {
-  /* 🔥 統一されたネオン枠線と影 */
+  /* 統一されたネオン枠線と影 */
   color: #fff;
   background: #00c8ff;
-  border: var(--neon-border); /* 🔥 統一 */
-  box-shadow: var(--neon-shadow); /* 🔥 統一 */
-  transform: translateY(-2px); 
+  border: var(--neon-border); 
+  box-shadow: var(--neon-shadow); 
+  transform: none; /* 浮き上がりを削除 */
 }
+
 /* --------------------------------- */
+/* 🔥 ラジオボタンベースのスライダー用CSS 🔥 */
+/* --------------------------------- */
+
+/* ラジオボタン自体を非表示にする */
+.work-card input[type="radio"] {
+    display: none;
+}
+
+/* 矢印ボタン (label要素) の共通スタイル */
+.work-card label.prev-btn, 
+.work-card label.next-btn {
+    position: absolute;
+    top: 50%; /* 🔥 修正: 新しい動的な高さの中心に配置 */
+    transform: translateY(-50%);
+    width: 30px;
+    height: 40px;
+    border: none;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0.8;
+    transition: opacity 0.2s, background 0.2s, box-shadow 0.2s;
+    line-height: 40px;
+    text-align: center;
+    user-select: none;
+    display: none; /* デフォルトでは全て非表示 */
+}
+
+.work-card label.prev-btn {
+    left: 18px; 
+    border-radius: 0 4px 4px 0;
+}
+
+.work-card label.next-btn {
+    right: 18px; 
+    border-radius: 4px 0 0 4px;
+}
+
+.work-card label.prev-btn:hover, 
+.work-card label.next-btn:hover {
+    opacity: 1;
+    background: rgba(0, 192, 255, 0.4); 
+    box-shadow: 0 0 10px rgba(0, 192, 255, 0.6);
+}
+
+/*
+  🔥 ラジオボタンのチェック状態に応じたギャラリーの位置とボタンの表示制御
+*/
+
+/* 1枚目の画像がチェックされている場合 */
+#img-1-1:checked ~ .work-gallery,
+#img-2-1:checked ~ .work-gallery,
+#img-3-1:checked ~ .work-gallery {
+    transform: translateX(0%); /* 1枚目を表示 */
+}
+/* 1枚目チェック時: 次へボタン (next-x-1) のみ表示 */
+#img-1-1:checked ~ .next-1-1,
+#img-2-1:checked ~ .next-2-1,
+#img-3-1:checked ~ .next-3-1 {
+    display: block;
+}
+/* 1枚目チェック時: 戻るボタン (prev-x) (最終ページへ戻る/ループ用) のみ表示 */
+#img-1-1:checked ~ .prev-1,
+#img-2-1:checked ~ .prev-2,
+#img-3-1:checked ~ .prev-3 {
+    display: block;
+}
+
+
+/* 2枚目の画像がチェックされている場合 */
+#img-1-2:checked ~ .work-gallery,
+#img-2-2:checked ~ .work-gallery,
+#img-3-2:checked ~ .work-gallery {
+    transform: translateX(-100%); /* 2枚目を表示 */
+}
+/* 2枚目チェック時: 戻るボタン (prev-x-2) と次へボタン (next-x-2) を表示 */
+#img-1-2:checked ~ .prev-1-2, #img-1-2:checked ~ .next-1-2,
+#img-2-2:checked ~ .prev-2-2, #img-2-2:checked ~ .next-2-2,
+#img-3-2:checked ~ .prev-3-2, #img-3-2:checked ~ .next-3-2 {
+    display: block;
+}
+
+/* 3枚目の画像がチェックされている場合 */
+#img-1-3:checked ~ .work-gallery,
+#img-2-3:checked ~ .work-gallery,
+#img-3-3:checked ~ .work-gallery {
+    transform: translateX(-200%); /* 3枚目を表示 */
+}
+/* 3枚目チェック時: 戻るボタン (prev-x-3) と次へボタン (next-x-3) (最初のページへ戻る/ループ用) を表示 */
+#img-1-3:checked ~ .prev-1-3, #img-1-3:checked ~ .next-1-3,
+#img-2-3:checked ~ .prev-2-3, #img-2-3:checked ~ .next-2-3,
+#img-3-3:checked ~ .prev-3-3, #img-3-3:checked ~ .next-3-3 {
+    display: block;
+}
 
 /*
 ====================================
@@ -727,11 +869,10 @@ p.subtitle {
     bottom: 0;
     left: 0;
     right: 0;
-    /* 🔥 修正: サイズを小さく (10px -> 8px / 0.9rem -> 0.85rem) */
     padding: 8px;
     background: rgba(0, 10, 20, 0.9);
     
-    /* 🔥 修正: 統一されたネオン枠線と影を適用 */
+    /* 統一されたネオン枠線と影を適用 */
     border-top: var(--neon-border);
     box-shadow: 0 -4px 10px rgba(0, 234, 255, 0.3), 0 -8px 20px rgba(0, 234, 255, 0.1); /* 上方向に影を出す */
 
@@ -892,6 +1033,7 @@ p.subtitle {
     .section-title {
         font-size: 1.8rem; /* セクションタイトルを小さく */
         scroll-margin-top: 100px;
+        padding-bottom: 5px; /* 下線のための余白を確保 */
     }
     .about-content {
         padding: 20px;
@@ -997,8 +1139,16 @@ p.subtitle {
         gap: 20px;
         padding: 15px;
     }
-    .work-card img {
-        height: 160px; /* 画像の高さを少し下げる */
+    
+    /* レスポンシブ対応の調整 */
+    .work-gallery {
+        /* height: 160px; を aspect-ratio に変更 */
+        aspect-ratio: 4 / 3; /* モバイル向けに少し縦長の4:3に設定 */
+    }
+    /* ボタンの位置を画像の高さに合わせて調整 */
+    .work-card label.prev-btn, 
+    .work-card label.next-btn {
+        top: 50%; /* 🔥 修正: 常に中心に配置 */
     }
     
     /* ---- 7. Skills (アプリ) ---- */
